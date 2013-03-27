@@ -1,0 +1,77 @@
+GBG Scripting Language
+Draft 1b
+by Paul Trandem
+======================
+A simple scripting language to allow for programming a Glow bean Glow device.
+When a script is completed, it is compiled into binary command data that is stored in the Glow Bean Glow device for "playback".
+
+frame - denotes the start of a frame command, with options
+	Instructs the device to display a static frame and hold for a set number of milliseconds
+
+	EXAMPLE:
+
+		frame {
+			name = "frame name or identifier"; // optional; used for conditional and jump commands; must be unique.
+
+			c = 0xffffff; 	// shorthand, hex for all 3 colors
+			r = 255; 		// longhand, hex or decimal for individual color
+			g = 0xff;
+			b = 255;
+			leds = p1 & p2 & p11; 	// sets which pixels should be on, all others are assumed off
+									// & is actually a bitwise OR in behavior
+			delay = 1000;	// sets frame delay in milliseconds (can also be hex: 0x03eb)
+		}
+
+
+increment - denotes the start of an increment command, with options
+	Instructs the device to increment desired frame values a defined number of times with a defined delay in between each increment (per type)
+
+	EXAMPLE:
+
+		increment {
+			name = "some other frame name or identifier";
+
+			// Color incrementing
+			// 8-bit, signed; valid values are -128 to 127
+			// color assignment is invalid in this command
+
+			r += 1; 	// c-style incrementing syntax is used
+			g -= 2;		// only + and - operators are supported
+			b += 0;		// same as being left out; no increment; 
+			colorDelay = 255;	// delay in ms between increments; valid values are 0-255
+			colorCount = 255;	// number of increments; valid values are 0-255
+
+			// LED Shift Incrementing
+			// valid values are 0-255
+			leds << 24; 		// shift leds left (or counter-clockwise) 24 times
+			shiftDelay = 255;	// delay in ms between shifts; valid values are 0-255
+		}
+
+jumpto - jump to a specific frame
+	Instructs the device to set the frame index to a specific frame
+
+	EXAMPLE:
+
+		jumpto: "some other frame name or identifier";
+
+
+if / else - conditional commands
+	Instructs the device to compare an internal variable against a provided constant and perform jumpto commands according to the results of the comparison
+
+	Valid internal variables will be defined for the device; possible examples include (but are not limited to):
+		- SWITCH: a user-programmable switch or button
+		- TEMP: the value provided by an internal temperature sensor
+
+	Valid constant values will depend on the internal variable used. Some examples may include:
+		- SWITCH: valid values are pressed and notpressed, which utlimately correspond to 1 and 0, respectively
+		- TEMP: numeric; valid possible values are 0-255
+
+	EXAMPLES:
+
+		if(SWITCH = pressed) jumpto: "frame name or identifier";
+		// if no "else" is present, the next command is loaded if the condition is not met
+
+		if(TEMP < 75) jumpto: "frame name or identifier";
+		else jumpto: "some other frame name or identifier";
+
+
