@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>GlowBeanGlow-8u2</AssemblyName>
+    <AssemblyName>GlowBeanGlow</AssemblyName>
     <Name>GlowBeanGlow</Name>
-    <RootNamespace>GlowBeanGlow-8u2</RootNamespace>
+    <RootNamespace>GlowBeanGlow</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
@@ -69,8 +69,8 @@
       </AvrGcc>
     </ToolchainSettings>
     <UsesExternalMakeFile>True</UsesExternalMakeFile>
-    <OutputDirectory>E:\Projects\Firmware\trunk\AVR\GlowBeanGlow-v2\GlowBeanGlow-8u2</OutputDirectory>
-    <ExternalMakeFilePath>E:\Projects\Firmware\trunk\AVR\GlowBeanGlow-v2\GlowBeanGlow-8u2\makefile</ExternalMakeFilePath>
+    <OutputDirectory>GlowBeanGlow</OutputDirectory>
+    <ExternalMakeFilePath>E:\Projects\Firmware\trunk\AVR\GlowBeanGlow-v2\GlowBeanGlow\makefile</ExternalMakeFilePath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ATmega32U2\ClockConfig.h">
