@@ -1,0 +1,44 @@
+﻿<Window x:Class="GlowBeanGlow.Api.TestInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GBG: Test Interface" Height="130" Width="190">
+    <StackPanel Orientation="Vertical" Background="Black">
+        <Slider Minimum="0" Maximum="255" Name="Red" ValueChanged="Red_ValueChanged" SnapsToDevicePixels="True">
+            <Slider.Background>
+                <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
+                    <GradientStop Color="Red" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Slider.Background>
+        </Slider>
+        <Slider Minimum="0" Maximum="255" Name="Green" ValueChanged="Green_ValueChanged" SnapsToDevicePixels="True">
+            <Slider.Background>
+                <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
+                    <GradientStop Color="#FF00FF0C" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Slider.Background>
+        </Slider>
+        <Slider Minimum="0" Maximum="255" Name="Blue" ValueChanged="Blue_ValueChanged" Foreground="{x:Null}" SnapsToDevicePixels="True">
+            <Slider.Background>
+                <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
+                    <GradientStop Color="#FF000CFF" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Slider.Background>
+        </Slider>
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+            <CheckBox Name="Led1" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led2" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led3" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led4" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led5" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led6" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led7" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led8" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led9" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led10" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+            <CheckBox Name="Led11" Unchecked="Led_Changed" Checked="Led_Changed"></CheckBox>
+        </StackPanel>
+    </StackPanel>
+</Window>
