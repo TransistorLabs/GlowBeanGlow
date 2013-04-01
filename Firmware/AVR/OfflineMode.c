@@ -82,6 +82,8 @@ static void InitCurrentMode(void)
 			animationMode_InstructionProgramCounter = 0;
 			colorIncrementMsRemaining = 0;
 			ledShiftMsRemaining = 0;
+			currentInstruction.IncrementFrame.ColorIncrementCount = 0;
+			currentInstruction.IncrementFrame.LedShiftCount = 0;
 			
 			// we've just switched into this mode, get the frameCount
 			animationMode_TotalInstructionCount = Storage_GetInstructionCount();
@@ -298,6 +300,7 @@ static void GetNextFrame_AnimateMode(LedDriver_Frame * const frameData)
 						frameData->Green = (uint8_t)green;
 					}						
 				}
+				
 				if(currentInstruction.IncrementFrame.LedShiftCount > 0 || ledShiftMsRemaining > 0)
 				{
 					instructionFinished = false;
@@ -351,7 +354,8 @@ static void GetNextFrame_AnimateMode(LedDriver_Frame * const frameData)
 					break;
 				
 				case InstructionType_Jump:
-					animationMode_InstructionProgramCounter = currentInstruction.JumpTo.TargetIndex-1;
+					animationMode_InstructionProgramCounter = currentInstruction.JumpTo.TargetIndex - 1;
+					frameData->MillisecondsHold = 0x0000;					
 					break;
 				default:
 					break;
