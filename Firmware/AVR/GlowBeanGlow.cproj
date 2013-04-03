@@ -69,8 +69,8 @@
       </AvrGcc>
     </ToolchainSettings>
     <UsesExternalMakeFile>True</UsesExternalMakeFile>
-    <OutputDirectory>GlowBeanGlow</OutputDirectory>
-    <ExternalMakeFilePath>E:\Projects\Firmware\trunk\AVR\GlowBeanGlow-v2\GlowBeanGlow\makefile</ExternalMakeFilePath>
+    <OutputDirectory>.</OutputDirectory>
+    <ExternalMakeFilePath>.\makefile</ExternalMakeFilePath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ATmega32U2\ClockConfig.h">
