@@ -661,7 +661,7 @@
         <Rectangle x:Name="Button1" HorizontalAlignment="Left" Height="12" Margin="412,30,0,0" Stroke="Black" VerticalAlignment="Top" Width="12" Style="{DynamicResource ButtonOffStyle}"/>
         <TextBlock TextWrapping="Wrap" Text="buttons:" Foreground="#FF7A7A7A" FontFamily="Segoe UI Light" HorizontalAlignment="Right" Width="56" VerticalAlignment="Center" Height="30" Canvas.Left="353" Canvas.Top="25" FontSize="14" TextAlignment="Right"/>
         <StackPanel Orientation="Vertical" Background="Black" Canvas.Left="15" Canvas.Top="209" Width="452">
-            <Slider Minimum="0" Maximum="255" x:Name="Red" ValueChanged="Red_ValueChanged" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
+            <Slider Minimum="0" Maximum="255" x:Name="Red" ValueChanged="RedValueChanged" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
                 <Slider.Background>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
                         <GradientStop Color="Red" Offset="0"/>
@@ -669,7 +669,7 @@
                     </LinearGradientBrush>
                 </Slider.Background>
             </Slider>
-            <Slider Minimum="0" Maximum="255" x:Name="Green" ValueChanged="Green_ValueChanged" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
+            <Slider Minimum="0" Maximum="255" x:Name="Green" ValueChanged="GreenValueChanged" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
                 <Slider.Background>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="1,1">
                         <GradientStop Color="#FF00FF0C" Offset="0"/>
@@ -677,7 +677,7 @@
                     </LinearGradientBrush>
                 </Slider.Background>
             </Slider>
-            <Slider Minimum="0" Maximum="255" x:Name="Blue" ValueChanged="Blue_ValueChanged" Foreground="{x:Null}" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
+            <Slider Minimum="0" Maximum="255" x:Name="Blue" ValueChanged="BlueValueChanged" Foreground="{x:Null}" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
                 <Slider.Background>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="1,0">
                         <GradientStop Color="#FF000CFF" Offset="0"/>
@@ -686,17 +686,17 @@
                 </Slider.Background>
             </Slider>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <CheckBox x:Name="Led1" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led2" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led3" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led4" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led5" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led6" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led7" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led8" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led9" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led10" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
-                <CheckBox x:Name="Led11" Unchecked="Led_Changed" Checked="Led_Changed" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led1" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led2" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led3" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led4" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led5" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led6" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led7" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led8" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led9" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led10" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
+                <CheckBox x:Name="Led11" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Margin="0,0,1,0"/>
             </StackPanel>
         </StackPanel>
     </Canvas>

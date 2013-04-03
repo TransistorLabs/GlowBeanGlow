@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GlowBeanGlow.Api.DataTypes;
@@ -17,6 +17,10 @@ namespace GlowBeanGlow.Api
 		private bool _attached = false;
 		private bool _connectedToDriver = false;
 
+        private bool _modeButtonLastState = false;
+        private bool _user1ButtonLastState = false;
+        private bool _user2ButtonLastState = false;
+
 		/// <summary>
 		/// Occurs when a device is attached.
 		/// </summary>
@@ -28,6 +32,16 @@ namespace GlowBeanGlow.Api
 		public event EventHandler DeviceRemoved;
 
 		public Action<double, double> OnTempChange;
+        
+        public Action OnModeButtonPressed;
+        public Action OnUser1ButtonPressed;
+        public Action OnUser2ButtonPressed;
+
+        public Action OnModeButtonReleased;
+        public Action OnUser1ButtonReleased;
+        public Action OnUser2ButtonReleased;
+
+        public IEnumerable<HidDevice> Devices { get; set; }
 
 		/// <summary>
 		/// 
@@ -36,7 +50,9 @@ namespace GlowBeanGlow.Api
 		/// <returns>True if a device is connected, False otherwise.</returns>
 		public bool Connect()
 		{
-			_device = HidDevices.Enumerate(VendorId, ProductId).FirstOrDefault();
+            //TODO: introduce a way to handle multiple devices throughout driver
+            Devices = HidDevices.Enumerate(VendorId, ProductId);
+            _device = Devices.FirstOrDefault();
 
 			if (_device != null)
 			{
@@ -88,64 +104,121 @@ namespace GlowBeanGlow.Api
 			if (_attached == false) { return; }
 			var reportBytes = report.Data;
 
-			byte tempHighByte = reportBytes[1];
-			byte tempLowByte = reportBytes[2];
-			byte buttons = reportBytes[0];
+            byte buttons = reportBytes[0];
+            bool button1Pressed = ((buttons & (byte)0x08) > 0);
+            bool button2Pressed = ((buttons & (byte)0x80) > 0);
+            bool button3Pressed = ((buttons & (byte)0x40) > 0);
 
-			bool isNegative = (tempHighByte & 0x80) > 0;
+            // trigger pressed events on edges
+            if (button1Pressed && !_modeButtonLastState)
+            {
+                if (OnModeButtonPressed != null)
+                {
+                    OnModeButtonPressed();
+                    _modeButtonLastState = true;
+                }
+            }
 
+            if (button2Pressed && !_user1ButtonLastState)
+            {
+                if (OnUser1ButtonPressed != null)
+                {
+                    OnUser1ButtonPressed();
+                    _user1ButtonLastState = true;
+                }
+            }
 
-			byte tempWholeNumberDataC = 0x00;
+            if (button3Pressed && !_user2ButtonLastState)
+            {
+                if (OnUser2ButtonPressed != null)
+                {
+                    OnUser2ButtonPressed();
+                    _user2ButtonLastState = true;
+                }
+            }
+            
+            // trigger released events on edges
+            if (!button1Pressed && _modeButtonLastState)
+            {
+                if (OnModeButtonReleased != null)
+                {
+                    OnModeButtonReleased();
+                    _modeButtonLastState = false;
+                }
+            }
 
-			byte[] data = new byte[2];
+            if (!button2Pressed && _user1ButtonLastState)
+            {
+                if (OnUser1ButtonReleased != null)
+                {
+                    OnUser1ButtonReleased();
+                    _user1ButtonLastState = false;
+                }
+            }
 
-			if (isNegative)
-			{
-				data[1] = 0xFF;
-			}
+            if (!button3Pressed && _user2ButtonLastState)
+            {
+                if (OnUser2ButtonReleased != null)
+                {
+                    OnUser2ButtonReleased();
+                    _user2ButtonLastState = false;
+                }
+            }
 
-			tempWholeNumberDataC = (byte)(tempHighByte << 1);
-			tempWholeNumberDataC |= (byte)((tempLowByte & 0x80) >> 7);
-			data[0] = tempWholeNumberDataC;
-
-			var tempCIntPortion = BitConverter.ToInt16(data, 0);
-
-			float tempC = tempCIntPortion;
-
-			if ((tempLowByte & 0x08) > 0) { tempC += 0.0625F; }
-			if ((tempLowByte & 0x10) > 0) { tempC += 0.125F; }
-			if ((tempLowByte & 0x20) > 0) { tempC += 0.25F; }
-			if ((tempLowByte & 0x40) > 0) { tempC += 0.5F; }
-
-
-			//°C  x  9/5 + 32 = °F
-			var tempF = tempC * 9 / 5 + 32;
-
-			if (OnTempChange != null)
-			{
-				OnTempChange(tempC, tempF);
-			}
-
-			//bool button1Pressed = ((buttons & (byte)0x80) > 0);
-			//bool button2Pressed = ((buttons & (byte)0x08) > 0);
-			//bool button3Pressed = ((buttons & (byte)0x40) > 0);
-
-			//this.Dispatcher.Invoke((Action)(() =>
-			//{
-			//	RawByteOutput.Text = sb.ToString();
-			//	DegreeOutputC.Text = string.Format("{0:00.0000}° C", tempC);
-			//	DegreeOutputF.Text = string.Format("{0:00.0}", tempF);
-
-			//	Button1.Style = Resources["ButtonOffStyle"] as Style;
-			//	Button2.Style = Resources["ButtonOffStyle"] as Style;
-			//	Button3.Style = Resources["ButtonOffStyle"] as Style;
-
-			//	if (button1Pressed) Button1.Style = Resources["ButtonOnStyle"] as Style;
-			//	if (button2Pressed) Button2.Style = Resources["ButtonOnStyle"] as Style;
-			//	if (button3Pressed) Button3.Style = Resources["ButtonOnStyle"] as Style;
-
-			//}));
-			_device.ReadReport(OnReport);
+			ProcessTemperature(reportBytes);
+            _device.ReadReport(OnReport);
 		}
+
+	    private void ProcessTemperature(byte[] reportBytes)
+	    {
+	        byte tempHighByte = reportBytes[1];
+	        byte tempLowByte = reportBytes[2];
+
+	        bool isNegative = (tempHighByte & 0x80) > 0;
+
+
+	        byte tempWholeNumberDataC = 0x00;
+
+	        byte[] data = new byte[2];
+
+	        if (isNegative)
+	        {
+	            data[1] = 0xFF;
+	        }
+
+	        tempWholeNumberDataC = (byte) (tempHighByte << 1);
+	        tempWholeNumberDataC |= (byte) ((tempLowByte & 0x80) >> 7);
+	        data[0] = tempWholeNumberDataC;
+
+	        var tempCIntPortion = BitConverter.ToInt16(data, 0);
+
+	        float tempC = tempCIntPortion;
+
+	        if ((tempLowByte & 0x08) > 0)
+	        {
+	            tempC += 0.0625F;
+	        }
+	        if ((tempLowByte & 0x10) > 0)
+	        {
+	            tempC += 0.125F;
+	        }
+	        if ((tempLowByte & 0x20) > 0)
+	        {
+	            tempC += 0.25F;
+	        }
+	        if ((tempLowByte & 0x40) > 0)
+	        {
+	            tempC += 0.5F;
+	        }
+
+
+	        //°C  x  9/5 + 32 = °F
+	        var tempF = tempC*9/5 + 32;
+
+	        if (OnTempChange != null)
+	        {
+	            OnTempChange(tempC, tempF);
+	        }
+	    }
 	}
 }

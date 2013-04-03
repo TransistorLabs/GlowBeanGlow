@@ -19,6 +19,16 @@ namespace GlowBeanGlow.Api.TestInterface
 			_usbDriver = new UsbDriver();
 			_usbDriver.Connect();
 			_usbDriver.OnTempChange += OnTempChange;
+            
+            _usbDriver.OnModeButtonPressed += () => Dispatcher.Invoke(() => Button1.Style = Resources["ButtonOnStyle"] as Style);
+            _usbDriver.OnModeButtonReleased += () => Dispatcher.Invoke(() => Button1.Style = Resources["ButtonOffStyle"] as Style);
+
+            _usbDriver.OnUser1ButtonPressed += () => Dispatcher.Invoke(() => Button2.Style = Resources["ButtonOnStyle"] as Style);
+            _usbDriver.OnUser1ButtonReleased += () => Dispatcher.Invoke(() => Button2.Style = Resources["ButtonOffStyle"] as Style);
+
+            _usbDriver.OnUser2ButtonPressed += () => Dispatcher.Invoke(() => Button3.Style = Resources["ButtonOnStyle"] as Style);
+            _usbDriver.OnUser2ButtonReleased += () => Dispatcher.Invoke(() => Button3.Style = Resources["ButtonOffStyle"] as Style);
+
 			_setFrame =
 				new SetFrameInstruction
 					{
@@ -30,33 +40,34 @@ namespace GlowBeanGlow.Api.TestInterface
 			RenderFrame();
 		}
 
-		private void OnTempChange(double c, double f)
+	    private void OnTempChange(double c, double f)
 		{
 			Dispatcher.Invoke(() =>
 				{
-
+                    DegreeOutputC.Text = string.Format("{0:00.0000}° C", c);
+                    DegreeOutputF.Text = string.Format("{0:00.0}", f);
 				});
 		}
 
-		private void Red_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void RedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			_setFrame.Red = Convert.ToByte(e.NewValue);
 			RenderFrame();
 		}
 
-		private void Green_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void GreenValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			_setFrame.Green = Convert.ToByte(e.NewValue);
 			RenderFrame();
 		}
 
-		private void Blue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void BlueValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			_setFrame.Blue = Convert.ToByte(e.NewValue);
 			RenderFrame();
 		}
 
-		private void Led_Changed(object sender, RoutedEventArgs e)
+		private void LedChanged(object sender, RoutedEventArgs e)
 		{
 			_setFrame.Leds[0] = Led1.IsChecked.Value;
 			_setFrame.Leds[1] = Led2.IsChecked.Value;
