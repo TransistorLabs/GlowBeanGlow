@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Threading;
 using GlowBeanGlow.Api.DataTypes;
 
 namespace GlowBeanGlow.Api.TestInterface
@@ -7,9 +8,9 @@ namespace GlowBeanGlow.Api.TestInterface
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
-		private UsbDriver _usbDriver;
+		private readonly UsbDriver _usbDriver;
 		private readonly SetFrameInstruction _setFrame;
 
 		public MainWindow()
@@ -17,15 +18,24 @@ namespace GlowBeanGlow.Api.TestInterface
 			InitializeComponent();
 			_usbDriver = new UsbDriver();
 			_usbDriver.Connect();
+			_usbDriver.OnTempChange += OnTempChange;
 			_setFrame =
 				new SetFrameInstruction
 					{
-						Leds = new LedState {LedRawBits = 0x0000},
-						Blue = (byte)Blue.Value,
-						Red = (byte)Red.Value,
-						Green = (byte)Green.Value
+						Blue = (byte) Blue.Value,
+						Red = (byte) Red.Value,
+						Green = (byte) Green.Value,
+						Leds = {LedRawBits = 0x0000}
 					};
 			RenderFrame();
+		}
+
+		private void OnTempChange(double c, double f)
+		{
+			Dispatcher.Invoke(() =>
+				{
+
+				});
 		}
 
 		private void Red_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
