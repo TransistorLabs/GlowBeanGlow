@@ -2,8 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using GlowBeanGlow.Api.DataTypes;
-using GlowBeanGlow.Api.DataTypes.Enumerations;
+using GlowBeanGlow.Api.Instructions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GlowBeanGlow.Api.Tests
@@ -23,15 +22,13 @@ namespace GlowBeanGlow.Api.Tests
         {
             var instruction = new SetFrameInstruction
                 {
-                    Red = 0xff,
-                    Green = 0x00,
-                    Blue = 0x10,
-                    Leds = {LedRawBits = 0xaa55},
+                    Color = { Red = 0xff, Green = 0x00, Blue = 0x10 },
+                    Leds = { LedRawBits = 0xaa55 },
                     MillisecondsHold = 0xbb66,
                 };
-            var bytes = instruction.GetByteArray(0);
-			Assert.AreEqual(0x00, bytes[0]);
-			Assert.AreEqual(0xff, bytes[1]);
+            var bytes = instruction.GetReportData(0);
+            Assert.AreEqual(0x00, bytes[0]);
+            Assert.AreEqual(0xff, bytes[1]);
             Assert.AreEqual(0x00, bytes[2]);
             Assert.AreEqual(0x10, bytes[3]);
             Assert.AreEqual(0x55, bytes[4]);
@@ -41,19 +38,17 @@ namespace GlowBeanGlow.Api.Tests
             Assert.AreEqual(0x00, bytes[8]);
         }
 
-	    [TestMethod]
-	    public void GetByteArrayReturnsCorrectArrayLength()
-	    {
-			var instruction = new SetFrameInstruction
-			{
-				Red = 0xff,
-				Green = 0x00,
-				Blue = 0x10,
-				Leds = { LedRawBits = 0xaa55 },
-				MillisecondsHold = 0xbb66,
-			};
-		    var bytes = instruction.GetByteArray(0);
-			Assert.AreEqual(9, bytes.Length);
-	    }
+        [TestMethod]
+        public void GetByteArrayReturnsCorrectArrayLength()
+        {
+            var instruction = new SetFrameInstruction
+            {
+                Color = { Red = 0xff, Green = 0x00, Blue = 0x10 },
+                Leds = { LedRawBits = 0xaa55 },
+                MillisecondsHold = 0xbb66,
+            };
+            var bytes = instruction.GetReportData(0);
+            Assert.AreEqual(9, bytes.Length);
+        }
     }
 }

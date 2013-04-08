@@ -37,7 +37,7 @@ void Features_ProcessReport(void const *reportData)
 		case SetFeatureCommand_ChangeFeatureMode:
 		{
 			// Verify that the command being provided is valid
-			if(featureReport->CommandData[0] > FeatureModeOptions_Begin && featureReport->CommandData[0] < FeatureModeOptions_End) 
+			if(featureReport->CommandData[0] < FeatureModeOptions_End)
 			{
 				currentFeatureMode = (Features_ModeOptions) featureReport->CommandData[0];
 				ManageFeatureModeState();

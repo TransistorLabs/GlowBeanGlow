@@ -12,59 +12,33 @@ Defines the hardware layout for GBG port pins as connected to an ATMEGAxxU2
 #ifndef LEDCONFIG_H_
 #define LEDCONFIG_H_
 
-#include <avr/io.h>
+	#include <avr/io.h>
 
 	#define PORTCONFIG_LEDCOUNT	11
-//
-	//#define LED0PIN		PB0
-	//#define LED1PIN		PB4
-	//#define LED2PIN		PB5
-	//#define LED3PIN		PB6
-	//#define LED4PIN		PC4
-	//#define LED5PIN		PC7
-	//#define LED6PIN		PD0
-	//#define LED7PIN		PD1
-	//#define LED8PIN		PD4
-	//#define LED9PIN		PD5
-	//#define LED10PIN	PD6
-//
-	//#define LED0PORT	&PORTB
-	//#define LED1PORT	&PORTB
-	//#define LED2PORT	&PORTB
-	//#define LED3PORT	&PORTB
-	//#define LED4PORT	&PORTC
-	//#define LED5PORT	&PORTC
-	//#define LED6PORT	&PORTD
-	//#define LED7PORT	&PORTD
-	//#define LED8PORT	&PORTD
-	//#define LED9PORT	&PORTD
-	//#define LED10PORT	&PORTD
-//
 
+	#define LED0PIN		PB5
+	#define LED1PIN		PB4
+	#define LED2PIN		PB0
+	#define LED3PIN		PD5
+	#define LED4PIN		PD4
+	#define LED5PIN		PD1
+	#define LED6PIN		PD0
+	#define LED7PIN		PC2
+	#define LED8PIN		PC4
+	#define LED9PIN		PC7
+	#define LED10PIN	PB6
 
-#define LED0PIN		PB5
-#define LED1PIN		PB4
-#define LED2PIN		PB0
-#define LED3PIN		PD5
-#define LED4PIN		PD4
-#define LED5PIN		PD1
-#define LED6PIN		PD0
-#define LED7PIN		PC2
-#define LED8PIN		PC4
-#define LED9PIN		PC7
-#define LED10PIN	PB6
-
-#define LED0PORT	&PORTB
-#define LED1PORT	&PORTB
-#define LED2PORT	&PORTB
-#define LED3PORT	&PORTD
-#define LED4PORT	&PORTD
-#define LED5PORT	&PORTD
-#define LED6PORT	&PORTD
-#define LED7PORT	&PORTC
-#define LED8PORT	&PORTC
-#define LED9PORT	&PORTC
-#define LED10PORT	&PORTB
+	#define LED0PORT	&PORTB
+	#define LED1PORT	&PORTB
+	#define LED2PORT	&PORTB
+	#define LED3PORT	&PORTD
+	#define LED4PORT	&PORTD
+	#define LED5PORT	&PORTD
+	#define LED6PORT	&PORTD
+	#define LED7PORT	&PORTC
+	#define LED8PORT	&PORTC
+	#define LED9PORT	&PORTC
+	#define LED10PORT	&PORTB
 
 	#define RED	OCR1A
 	#define GRN	OCR1B

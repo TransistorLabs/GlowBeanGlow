@@ -1,0 +1,8 @@
+﻿<Window x:Class="GlowBeanGlow.Api.TestInterface.DeviceConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GBG: Test Interface - Configuration" Height="269.5" Width="485">
+    <Canvas Background="Black">
+        
+    </Canvas>
+</Window>

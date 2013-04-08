@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HidLibrary">
-      <HintPath>..\packages\hidlibrary.3.2.20.0\lib\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.2.22.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\hidlibrary.3.2.22.0\lib\HidLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,19 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataTypes\IInstruction.cs" />
-    <Compile Include="DataTypes\SetFrameInstruction.cs" />
-    <Compile Include="DataTypes\Enumerations\InstructionTypes.cs" />
-    <Compile Include="DataTypes\Enumerations\LedShiftOptions.cs" />
-    <Compile Include="DataTypes\LedState.cs" />
+    <Compile Include="Features\DeviceConfiguration.cs" />
+    <Compile Include="Features\FeatureModeOptions.cs" />
+    <Compile Include="Features\SetFeatureCommands.cs" />
+    <Compile Include="Interfaces\IReportData.cs" />
+    <Compile Include="Interfaces\IInstruction.cs" />
+    <Compile Include="Instructions\IncrementFrameInstruction.cs" />
+    <Compile Include="Display\RgbColor.cs" />
+    <Compile Include="Features\SetFeatureReport.cs" />
+    <Compile Include="Instructions\SetFrameInstruction.cs" />
+    <Compile Include="Instructions\InstructionTypes.cs" />
+    <Compile Include="Instructions\LedShiftOptions.cs" />
+    <Compile Include="Display\LedState.cs" />
     <Compile Include="Helpers\BitHelpers.cs" />
+    <Compile Include="LiveFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsbDriver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

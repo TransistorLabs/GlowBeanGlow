@@ -13,43 +13,37 @@
 	#include "Instructions.h"
 
 	/* Enums */
+	
+	typedef enum
+	{
+		SetFeatureCommand_SetStaticColor = 0x00,
+		SetFeatureCommand_ChangeFeatureMode = 0x01,
+		
+		// Assert Begin Marker - not a valid value
+		SetFeatureCommand_End,
+	} SetFeatureCommand;
 
 	// If the application is in UsbActive state, the SetFeature USB commands will configure the mode,
 	// which determines how USB OUTPUT reports are handled
 	typedef enum
 	{
-		// Assert Begin Marker - not a valid value
-		FeatureModeOptions_Begin = 0x00,
-		
 		// In this mode, usb output reports will set the frame data directly to the display
-		FeatureModeOptions_RenderLiveFrameData = 0x01,
+		FeatureModeOptions_RenderLiveFrameData = 0x00,
 		
 		// In this mode, usb output reports will trigger the reset of an index and storage of future frame data
-		FeatureModeOptions_StoreProgramStart = 0x02,
+		FeatureModeOptions_StoreProgramStart = 0x01,
 		
 		// In this mode, the device will write out the total frame count to memory, then automatically switch to mode RenderCurrentFrameData
-		FeatureModeOptions_StoreProgramStop = 0x03,
+		FeatureModeOptions_StoreProgramStop = 0x02,
 		
 		// Assert End Marker - not a valid value
 		FeatureModeOptions_End,
 		
 		
-		// This mode is not directly settable; this mode is automatically entered after StoreAnimationFrameStart
+		// This mode should not be set directly; this mode is automatically entered after StoreAnimationFrameStart
 		FeatureModeOptions_StoreProgramInProgress = 0xff 
 	} Features_ModeOptions;
 
-	typedef enum
-	{
-		// Assert Begin Marker - not a valid value
-		SetFeatureCommand_Begin = 0x00,
-		
-		SetFeatureCommand_SetStaticColor = 0x01,
-		SetFeatureCommand_ChangeFeatureMode = 0x03,
-		
-		// Assert Begin Marker - not a valid value
-		SetFeatureCommand_End,
-	} SetFeatureCommand;
-	
 	/* Function Prototypes */
 
 	void Features_Init(void);
