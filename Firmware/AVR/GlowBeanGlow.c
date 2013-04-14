@@ -82,7 +82,7 @@ void ApplicationMode_Task(void)
 	{
 		case ApplicationMode_UsbConnected:
 			// Usb Connected, but not yet ready to go
-			LedDriver_RenderKeyFrame(0x00, 0x00, 0xff, 0xffff, 0x0000);
+			LedDriver_RenderOneColorFrame(0x00, 0x00, 0xff, 0xffff, 0x0000);
 			break;
 
 		case ApplicationMode_UsbActive:
@@ -90,18 +90,18 @@ void ApplicationMode_Task(void)
 			{
 				// Usb Online Mode
 				// Set to green if we're first switching into Active Usb
-				LedDriver_RenderKeyFrame(0x00, 0xff, 0x00, 0xffff, 0x0000);
+				LedDriver_RenderOneColorFrame(0x00, 0xff, 0x00, 0xffff, 0x0000);
 			}
 			break;
 
 		case ApplicationMode_UsbErrorState:
 			// Usb connection error mode
-			LedDriver_RenderKeyFrame(0xff, 0x00, 0x00, 0x5555, 0x0000);
+			LedDriver_RenderOneColorFrame(0xff, 0x00, 0x00, 0x5555, 0x0000);
 			break;
 
 		case ApplicationMode_GenericErrorState:
 			// Indicate some other error mode
-			LedDriver_RenderKeyFrame(0xff, 0x00, 0x00, 0xffff, 0x0000);
+			LedDriver_RenderOneColorFrame(0xff, 0x00, 0x00, 0xffff, 0x0000);
 			break;
 			
 		case ApplicationMode_UsbOffline:
@@ -178,20 +178,20 @@ void EVENT_InputDriver_ButtonDown(uint8_t buttonMask)
 /************************************************************************/
 /* LED DRIVER CALLBACK                                                  */
 /************************************************************************/
-void CALLBACK_LedDriver_GetNextFrame(LedDriver_Frame * const nextFrame)
+void CALLBACK_LedDriver_GetNextFrame(LedDriver_OneColorFrame * const nextFrame)
 {
 	switch(ApplicationMode)
 	{
 		case ApplicationMode_UsbConnected:
 			// Usb Connected, but not yet ready to go
-			LedDriver_RenderKeyFrame(0x00, 0x00, 0xff, 0xffff, 0x0000);
+			LedDriver_RenderOneColorFrame(0x00, 0x00, 0xff, 0xffff, 0x0000);
 			break;
 
 		case ApplicationMode_UsbActive:
 			// Usb Online Mode
 			if(LastApplicationMode != ApplicationMode)
 			{
-				LedDriver_RenderKeyFrame(0x00, 0xff, 0x00, 0xffff, 0x0000);
+				LedDriver_RenderOneColorFrame(0x00, 0xff, 0x00, 0xffff, 0x0000);
 			}
 			else
 			{
@@ -201,12 +201,12 @@ void CALLBACK_LedDriver_GetNextFrame(LedDriver_Frame * const nextFrame)
 
 		case ApplicationMode_UsbErrorState:
 			// Usb connection error mode
-			LedDriver_RenderKeyFrame(0xff, 0x00, 0x00, 0xffff, 0x0000);
+			LedDriver_RenderOneColorFrame(0xff, 0x00, 0x00, 0xffff, 0x0000);
 			break;
 
 		case ApplicationMode_GenericErrorState:
 			// Indicate some other error mode
-			LedDriver_RenderKeyFrame(0xff, 0x00, 0x00, 0x5555, 0x0000);
+			LedDriver_RenderOneColorFrame(0xff, 0x00, 0x00, 0x5555, 0x0000);
 			break;
 			
 		case ApplicationMode_UsbOffline:

@@ -79,7 +79,7 @@
 	const void* ReportData,
 	const uint16_t ReportSize);
 
-	void CALLBACK_LedDriver_GetNextFrame(LedDriver_Frame * const nextFrame);
+	void CALLBACK_LedDriver_GetNextFrame(LedDriver_OneColorFrame * const nextFrame);
 	void EVENT_InputDriver_ButtonDown(uint8_t buttonMask);
 	void EVENT_InputDriver_ButtonUp(uint8_t buttonMask);
 

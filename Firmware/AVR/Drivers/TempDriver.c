@@ -20,7 +20,7 @@
 // Initial value for the counter is 12c, or 300 ms nominal, 
 
 
-const static uint16_t TempReadDelayMs = 0x0001;
+const static uint16_t TempReadDelayMs = 0x03e8;
 static volatile uint16_t readDelayMsCounter = 0x0001;
 static volatile bool shouldReadTemp = true;
 

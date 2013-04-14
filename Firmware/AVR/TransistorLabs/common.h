@@ -18,6 +18,8 @@
 	
 	uint16_t Rotate11BitsLeft(uint16_t byte);
 	uint16_t Rotate11BitsRight(uint16_t byte);
+	uint16_t Rotate12BitsLeft(uint16_t byte);
+	uint16_t Rotate12BitsRight(uint16_t byte);
 	
 
 #endif /* TRANSISTORLABS_COMMON_H_ */

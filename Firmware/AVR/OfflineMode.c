@@ -14,11 +14,11 @@ static OfflineMode_ModeOptions OfflineMode = OfflineMode_Static;
 static volatile Instructions_Instruction currentInstruction;
 
 static void InitCurrentMode(void);
-static void GetNextFrame_StaticMode(LedDriver_Frame * const frameData);
-static void GetNextFrame_TempMode(LedDriver_Frame * const frameData);
-static void GetNextFrame_CycleMode(LedDriver_Frame * const frameData);
-static void GetNextFrame_AnimateMode(LedDriver_Frame * const frameData);
-static void GetNextFrame_OffMode(LedDriver_Frame * const frameData);
+static void GetNextFrame_StaticMode(LedDriver_OneColorFrame * const frameData);
+static void GetNextFrame_TempMode(LedDriver_OneColorFrame * const frameData);
+static void GetNextFrame_CycleMode(LedDriver_OneColorFrame * const frameData);
+static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData);
+static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData);
 
 static uint16_t animationMode_TotalInstructionCount = 0;
 static uint16_t animationMode_InstructionProgramCounter = 0;
@@ -35,7 +35,7 @@ static uint8_t cycleModeGreen	= 0x00;
 static uint8_t cycleModeBlue	= 0x00;
 static uint8_t cycleModeState	= 0x00;
 
-static void (*GetNextFrame[NUMOFFLINEMODES])(LedDriver_Frame * const frameData) = {
+static void (*GetNextFrame[NUMOFFLINEMODES])(LedDriver_OneColorFrame * const frameData) = {
 	GetNextFrame_StaticMode, 
 	GetNextFrame_TempMode,
 	GetNextFrame_CycleMode, 
@@ -48,7 +48,7 @@ void OfflineMode_Init(void)
 	InitCurrentMode();
 }
 
-void OfflineMode_GetNextFrame(LedDriver_Frame * const frameData )
+void OfflineMode_GetNextFrame(LedDriver_OneColorFrame * const frameData )
 {
 	GetNextFrame[OfflineMode](frameData);
 }
@@ -113,7 +113,7 @@ static void InitCurrentMode(void)
 	}
 }
 
-static void GetNextFrame_StaticMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_StaticMode(LedDriver_OneColorFrame * const frameData)
 {
 	// Set the frame data
 	frameData->Red		= staticModeRed;
@@ -125,7 +125,7 @@ static void GetNextFrame_StaticMode(LedDriver_Frame * const frameData)
 
 //static uint8_t tempTestValue = 0;
 //static uint8_t tempOutputValue = 0;
-static void GetNextFrame_TempMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_TempMode(LedDriver_OneColorFrame * const frameData)
 {
 	//tempTestValue++;
 	//tempOutputValue = TempDriver_LoopbackTest(tempTestValue);
@@ -154,7 +154,7 @@ static void GetNextFrame_TempMode(LedDriver_Frame * const frameData)
 	frameData->MillisecondsHold = 0x0001;
 }
 
-static void GetNextFrame_PulseMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_PulseMode(LedDriver_OneColorFrame * const frameData)
 {
 	//TODO: ditch pulsemode for being kinda stupid?
 	//or fix this pizza, cuz it be broke (kinda.)
@@ -182,7 +182,7 @@ static void GetNextFrame_PulseMode(LedDriver_Frame * const frameData)
 	//
 }
 
-static void GetNextFrame_CycleMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_CycleMode(LedDriver_OneColorFrame * const frameData)
 {
 	switch(cycleModeState)
 	{
@@ -229,7 +229,7 @@ static void GetNextFrame_CycleMode(LedDriver_Frame * const frameData)
 	frameData->MillisecondsHold = 0x0008;
 }
 
-static void GetNextFrame_AnimateMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 {
 	// TODO: HANDLE INSTRUCTIONS
 	if(animationMode_TotalInstructionCount == 0)
@@ -370,7 +370,7 @@ static void GetNextFrame_AnimateMode(LedDriver_Frame * const frameData)
 		}			
 	}
 }
-static void GetNextFrame_OffMode(LedDriver_Frame * const frameData)
+static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData)
 {
 	frameData->Red		= 0x00;
 	frameData->Green	= 0x00;

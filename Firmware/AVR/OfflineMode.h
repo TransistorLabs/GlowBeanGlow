@@ -23,7 +23,7 @@
 	} OfflineMode_ModeOptions;
 
 	void OfflineMode_Init(void);
-	void OfflineMode_GetNextFrame(LedDriver_Frame * const frameData );
+	void OfflineMode_GetNextFrame(LedDriver_OneColorFrame * const frameData );
 	void OfflineMode_SetNextOfflineMode(void);
 
 #endif /* OFFLINEMODE_H_ */

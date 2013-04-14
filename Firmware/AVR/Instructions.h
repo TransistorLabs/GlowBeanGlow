@@ -31,7 +31,7 @@
 /* Data Structures                                                      */
 /************************************************************************/
 
-	// Key Frame Instruction (instruction type 0x00)
+	// Set Frame Instruction (instruction type 0x00)
 	typedef struct {
 		int8_t Red;
 		int8_t Green;
