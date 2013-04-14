@@ -724,6 +724,8 @@
         <CheckBox x:Name="Led11" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="355.148" Canvas.Top="90.654"/>
         <Button Content="Show Current Configuration" Height="21" Canvas.Left="315" Canvas.Top="213" Width="149" Click="Configuration_Click" Style="{DynamicResource LinkButton}"/>
         <Button Content="Set as Offline Static Color" Height="21" Canvas.Left="102" Canvas.Top="213" Width="149" Click="SetStatic_Click" Style="{DynamicResource LinkButton}"/>
+        <Button Content="Full Color Rotate Test" Height="21" Canvas.Left="39" Canvas.Top="131" Width="263" Click="FullColorRotateTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Content="Spectrum Rotate Test" Height="21" Canvas.Left="161" Canvas.Top="131" Width="141" Click="FullColorSpectrumTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Canvas>
 
 </Window>

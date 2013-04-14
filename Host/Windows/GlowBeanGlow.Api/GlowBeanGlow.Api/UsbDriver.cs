@@ -78,6 +78,18 @@ namespace GlowBeanGlow.Api
             }
         }
 
+        public void RenderFrame(FullColorLiveFrame f)
+        {
+            if (_connectedToDriver)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    var report = new HidReport(9, new HidDeviceData(f.GetReportDataForPage(i), HidDeviceData.ReadStatus.NoDataRead));
+                    _device.WriteReport(report, Console.WriteLine);
+                }
+            }
+        }
+
         private void DeviceAttachedHandler()
         {
             _attached = true;

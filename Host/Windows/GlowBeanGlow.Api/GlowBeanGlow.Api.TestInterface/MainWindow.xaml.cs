@@ -104,5 +104,61 @@ namespace GlowBeanGlow.Api.TestInterface
         {
             _usbDriver.SetDeviceConfiguration(_frame.Color);
         }
+
+        private FullColorLiveFrame _fullColorFrame = null;
+        private void FullColorRotateTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (_fullColorFrame == null)
+            {
+                _fullColorFrame = new FullColorLiveFrame();
+                _fullColorFrame.Leds.LedRawBits = 0x0007;
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0xaa, Green = 0x10, Blue = 0x00 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x88, Green = 0x44, Blue = 0x00 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x88, Blue = 0x00 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xff, Blue = 0x66 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xdd, Blue = 0x99 });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x99, Blue = 0xff });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x00, Blue = 0xff });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x33, Green = 0x00, Blue = 0xff });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x00, Blue = 0xdd });
+            }
+            else
+            {
+                _fullColorFrame.Leds.RotateClockwise();
+            }
+
+            _usbDriver.RenderFrame(_fullColorFrame);
+            
+        }
+
+        private FullColorLiveFrame _fullColorSpectrumFrame = null;
+        private void FullColorSpectrumTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (_fullColorSpectrumFrame == null)
+            {
+                _fullColorSpectrumFrame = new FullColorLiveFrame();
+                _fullColorSpectrumFrame.Leds.LedRawBits = 0xffff;
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0xaa, Green = 0x10, Blue = 0x00 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x88, Green = 0x44, Blue = 0x00 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x88, Blue = 0x00 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xff, Blue = 0x66 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0xdd, Blue = 0x99 });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x99, Blue = 0xff });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x00, Blue = 0xff });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x33, Green = 0x00, Blue = 0xff });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x00, Blue = 0xdd });
+            }
+            else
+            {
+                _fullColorSpectrumFrame.RotateColorsClockwise();
+            }
+
+            _usbDriver.RenderFrame(_fullColorSpectrumFrame);
+
+        }
     }
 }
