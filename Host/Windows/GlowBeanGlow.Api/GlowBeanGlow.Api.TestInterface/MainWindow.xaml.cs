@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
+using GlowBeanGlow.Api.Display;
 using GlowBeanGlow.Api.Instructions;
+using GlowBeanGlow.Api.Interfaces;
 
 namespace GlowBeanGlow.Api.TestInterface
 {
@@ -159,6 +162,14 @@ namespace GlowBeanGlow.Api.TestInterface
 
             _usbDriver.RenderFrame(_fullColorSpectrumFrame);
 
+        }
+
+        private void WriteTestAnimation_Click(object sender, RoutedEventArgs e)
+        {
+            var instructions = new List<IInstruction>();
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 }, MillisecondsHold = 0x00ff, Leds = new LedState { LedRawBits = 0x5555 } });
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 }, MillisecondsHold = 0x00ff, Leds = new LedState { LedRawBits = 0xaaaa } });
+            _usbDriver.WriteAnimationProgram(instructions);
         }
     }
 }

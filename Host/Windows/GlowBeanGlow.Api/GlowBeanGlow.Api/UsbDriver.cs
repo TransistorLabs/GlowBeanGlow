@@ -4,6 +4,7 @@ using System.Linq;
 using GlowBeanGlow.Api.Display;
 using GlowBeanGlow.Api.Features;
 using GlowBeanGlow.Api.Instructions;
+using GlowBeanGlow.Api.Interfaces;
 using HidLibrary;
 
 namespace GlowBeanGlow.Api
@@ -67,27 +68,44 @@ namespace GlowBeanGlow.Api
             return false;
         }
 
-        public void RenderFrame(LiveFrame setFrame)
+        public void RenderFrame(LiveFrame frame)
         {
             if (_connectedToDriver)
             {
                 var report = new HidReport(9,
-                                           new HidDeviceData(setFrame.GetReportData(0),
+                                           new HidDeviceData(frame.GetReportData(0),
                                                              HidDeviceData.ReadStatus.NoDataRead));
-                _device.WriteReport(report, Console.WriteLine);
+                _device.WriteReport(report, null);
             }
         }
 
-        public void RenderFrame(FullColorLiveFrame f)
+        public void RenderFrame(FullColorLiveFrame frame)
         {
             if (_connectedToDriver)
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    var report = new HidReport(9, new HidDeviceData(f.GetReportDataForPage(i), HidDeviceData.ReadStatus.NoDataRead));
-                    _device.WriteReport(report, Console.WriteLine);
+                    var report = new HidReport(9, new HidDeviceData(frame.GetReportDataForPage(i), HidDeviceData.ReadStatus.NoDataRead));
+                    _device.WriteReport(report, null);
                 }
             }
+        }
+
+        public void WriteAnimationProgram(IList<IInstruction> instructions)
+        {
+            // Put device in program mode
+            var startCommand = new SetFeatureReport {Command = SetFeatureCommands.ChangeFeatureMode};
+            startCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStart;
+            _device.WriteFeatureData(startCommand.GetReportData());
+
+            foreach (var instruction in instructions)
+            {
+                _device.Write(instruction.GetReportData());
+            }
+
+            var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
+            stopCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStop;
+            _device.WriteFeatureData(stopCommand.GetReportData());
         }
 
         private void DeviceAttachedHandler()
@@ -237,5 +255,6 @@ namespace GlowBeanGlow.Api
                 OnTempChange(tempC, tempF);
             }
         }
+
     }
 }

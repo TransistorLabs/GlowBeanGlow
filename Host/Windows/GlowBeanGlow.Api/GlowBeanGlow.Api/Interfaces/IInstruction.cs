@@ -2,7 +2,7 @@
 
 namespace GlowBeanGlow.Api.Interfaces
 {
-    public interface IInstruction
+    public interface IInstruction : IReportData
     {
         InstructionTypes InstructionType { get; }
     }

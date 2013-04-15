@@ -4,7 +4,7 @@ using GlowBeanGlow.Api.Interfaces;
 
 namespace GlowBeanGlow.Api.Instructions
 {
-    public class SetFrameInstruction : IReportData, IInstruction
+    public class SetFrameInstruction : IInstruction
     {
         public SetFrameInstruction()
         {
@@ -30,8 +30,8 @@ namespace GlowBeanGlow.Api.Instructions
             byteArray[3] = Color.Blue;
             byteArray[4] = BitHelpers.GetLowByte(Leds.LedRawBits);
             byteArray[5] = BitHelpers.GetHighByte(Leds.LedRawBits);
-            byteArray[6] = BitHelpers.GetHighByte(MillisecondsHold);
-            byteArray[7] = BitHelpers.GetLowByte(MillisecondsHold);
+            byteArray[6] = BitHelpers.GetLowByte(MillisecondsHold);
+            byteArray[7] = BitHelpers.GetHighByte(MillisecondsHold);
             byteArray[8] = (byte)InstructionType;
             return byteArray;
         }
