@@ -167,8 +167,60 @@ namespace GlowBeanGlow.Api.TestInterface
         private void WriteTestAnimation_Click(object sender, RoutedEventArgs e)
         {
             var instructions = new List<IInstruction>();
-            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 }, MillisecondsHold = 0x00ff, Leds = new LedState { LedRawBits = 0x5555 } });
-            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 }, MillisecondsHold = 0x00ff, Leds = new LedState { LedRawBits = 0xaaaa } });
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 }, MillisecondsHold = 0x00ff, Leds = new LedState { LedRawBits  = 0x00ff } });
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0, Green = 0, Blue = 255 }, MillisecondsHold = 0x000f, Leds = new LedState { LedRawBits = 0x0001 } });
+            instructions.Add(new IncrementFrameInstruction
+                {
+                    BlueIncrement = -1,
+                    GreenIncrement = 1,
+                    ColorIncrementCount = 255,
+                    ColorIncrementDelayMs = 4
+                });
+            
+            instructions.Add(new IncrementFrameInstruction
+            {
+                BlueIncrement = 1,
+                GreenIncrement = -2,
+                RedIncrement = 4,
+                ColorIncrementCount = 127,
+                ColorIncrementDelayMs = 4,
+                LedShiftCount = 33,
+                LedShiftDelayMs = 6,
+                LedShiftType = LedShiftOptions.ShiftLedRight
+            });
+
+            instructions.Add(new IncrementFrameInstruction
+            {
+                BlueIncrement = -1,
+                GreenIncrement = 4,
+                RedIncrement = -2,
+                ColorIncrementCount = 33,
+                ColorIncrementDelayMs = 4,
+                LedShiftCount = 33,
+                LedShiftDelayMs = 4,
+                LedShiftType = LedShiftOptions.ShiftLedLeft
+            });
+
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x03eb, Leds = new LedState { LedRawBits = 0x0100 } });
+
+            instructions.Add(new IncrementFrameInstruction
+            {
+                LedShiftCount = 33,
+                LedShiftDelayMs = 10,
+                LedShiftType = LedShiftOptions.ShiftLedRight
+            });
+
+            instructions.Add(new IncrementFrameInstruction
+            {
+                LedShiftCount = 33,
+                LedShiftDelayMs = 10,
+                LedShiftType = LedShiftOptions.ShiftLedLeft
+            });
+
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0200 } });
+            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0400 } });
+
+
             _usbDriver.WriteAnimationProgram(instructions);
         }
     }
