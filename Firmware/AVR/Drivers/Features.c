@@ -1,8 +1,7 @@
 /*
- * Features.c
- *
  * Created: 1/20/2013 9:56:02 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 #include "Features.h"

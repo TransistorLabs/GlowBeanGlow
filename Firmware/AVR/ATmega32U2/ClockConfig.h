@@ -1,8 +1,7 @@
 /*
- * ClockConfig.h
- *
  * Created: 1/13/2013 10:32:23 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  
  Definitions specific to the ATMEGAxxU2 clock hardware
  

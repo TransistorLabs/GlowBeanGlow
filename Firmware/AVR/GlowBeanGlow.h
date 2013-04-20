@@ -1,8 +1,7 @@
 /*
- * GlowBeanGlow.h
- *
  * Created: 12/2/2012 9:53:12 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

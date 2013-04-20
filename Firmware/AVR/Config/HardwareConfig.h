@@ -1,8 +1,7 @@
 /*
- * HardwareConfig.h
- *
  * Created: 1/13/2013 10:56:19 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  
  This file should contain all hardware-specific headers
  

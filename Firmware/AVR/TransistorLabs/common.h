@@ -1,8 +1,7 @@
 /*
- * common.h
- *
  * Created: 2/4/2013 8:17:56 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

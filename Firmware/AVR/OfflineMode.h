@@ -1,8 +1,7 @@
 /*
- * OfflineMode.h
- *
  * Created: 2/3/2013 1:33:20 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

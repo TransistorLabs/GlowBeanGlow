@@ -1,8 +1,7 @@
 /*
- * Instructions.h
- *
  * Created: 3/10/2013 8:21:38 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 
@@ -43,6 +42,7 @@
 	} Instructions_SetFrame;
 
 	// Increment Frame Instruction (instruction type: 0x01)
+	// Ri Gi Bi Cd Cc Ld Lc Lst IT
 	typedef struct
 	{
 		// Color increment data

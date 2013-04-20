@@ -1,8 +1,7 @@
 /*
- * PortConfig.c
- *
  * Created: 1/13/2013 10:37:16 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  
  Methods for configuring the ATMEGAxxU2 hardware for LEDs (PWM, etc)
  

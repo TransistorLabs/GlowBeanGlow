@@ -1,8 +1,7 @@
 /*
- * Timer0Config.c
- *
  * Created: 1/27/2013 8:55:42 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 #include "Timer0Config.h"

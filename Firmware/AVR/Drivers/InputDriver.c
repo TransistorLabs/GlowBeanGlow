@@ -1,8 +1,7 @@
 /*
- * InputDriver.c
- *
  * Created: 2/3/2013 4:23:22 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 #include "InputDriver.h"
