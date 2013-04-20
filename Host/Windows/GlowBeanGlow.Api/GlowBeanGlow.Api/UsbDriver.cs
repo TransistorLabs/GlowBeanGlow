@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using GlowBeanGlow.Api.Display;
 using GlowBeanGlow.Api.Features;
 using GlowBeanGlow.Api.Instructions;
@@ -93,19 +96,37 @@ namespace GlowBeanGlow.Api
 
         public void WriteAnimationProgram(IList<IInstruction> instructions)
         {
+            var stack = new Stack<IInstruction>(instructions.Reverse());
+            
             // Put device in program mode
             var startCommand = new SetFeatureReport {Command = SetFeatureCommands.ChangeFeatureMode};
             startCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStart;
             _device.WriteFeatureData(startCommand.GetReportData());
 
-            foreach (var instruction in instructions)
+            WriteProgramData(stack);
+        }
+
+        private void WriteProgramData(Stack<IInstruction> stack)
+        {
+            if (stack.Count == 0)
             {
-                _device.Write(instruction.GetReportData());
+                //Finalize program
+                var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
+                stopCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStop;
+                _device.WriteFeatureData(stopCommand.GetReportData());
+                return;
             }
 
-            var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
-            stopCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStop;
-            _device.WriteFeatureData(stopCommand.GetReportData());
+            var topInstruction = stack.Pop();
+            _device.Write(topInstruction.GetReportData(),
+                          (success) =>
+                              {
+                                  if (!success)
+                                  {
+                                      throw new ApplicationException("Program Write failed.");
+                                  }
+                                  WriteProgramData(stack);
+                              });
         }
 
         private void DeviceAttachedHandler()
