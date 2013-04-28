@@ -1,8 +1,7 @@
 /*
-* GlowBeanGlow.c
-*
 * Created: 11/30/2012 8:25:12 PM
-*  Author: Paul Trandem
+*  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
 */
 
 #include "GlowBeanGlow.h"

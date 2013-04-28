@@ -1,8 +1,7 @@
 /*
- * StorageConfig.h
- *
  * Created: 1/19/2013 9:05:00 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

@@ -1,8 +1,7 @@
 /*
- * Storage.h
- *
  * Created: 1/19/2013 8:29:22 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

@@ -1,8 +1,7 @@
 /*
- * PortConfig.h
- *
  * Created: 1/13/2013 10:15:25 AM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
 
 Defines the hardware layout for GBG port pins as connected to an ATMEGAxxU2
 

@@ -1,9 +1,9 @@
 /*
- * LedDriver.c
-	This file contains the functionality to drive LEDs
+ * This file contains the functionality to drive LEDs
  *
  * Created: 1/9/2013 7:27:22 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 #include <util/delay.h>

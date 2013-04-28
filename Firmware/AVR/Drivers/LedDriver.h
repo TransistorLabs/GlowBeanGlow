@@ -1,8 +1,7 @@
 /*
- * LedDriver.h
- *
  * Created: 1/9/2013 7:27:12 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 

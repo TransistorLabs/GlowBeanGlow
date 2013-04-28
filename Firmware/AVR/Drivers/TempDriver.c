@@ -1,8 +1,7 @@
 /*
- * TempDriver.c
- *
  * Created: 2/13/2013 9:07:23 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 #include "TempDriver.h"

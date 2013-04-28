@@ -1,8 +1,7 @@
 /*
- * Features.h
- *
  * Created: 1/20/2013 9:55:50 PM
- *  Author: Paul Trandem
+ *  Author: paul trandem
+ *  Copyright (c) 2013 Paul Trandem
  */ 
 
 
