@@ -219,7 +219,7 @@ namespace GlowBeanGlow.Api.TestInterface
 
             instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0200 } });
             instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0400 } });
-
+            instructions.Add(new JumpToInstruction{ JumpTargetIndex = 6});
 
             _usbDriver.WriteAnimationProgram(instructions);
         }

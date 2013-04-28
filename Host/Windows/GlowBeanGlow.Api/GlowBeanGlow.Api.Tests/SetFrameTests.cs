@@ -33,8 +33,8 @@ namespace GlowBeanGlow.Api.Tests
             Assert.AreEqual(0x10, bytes[3]);
             Assert.AreEqual(0x55, bytes[4]);
             Assert.AreEqual(0xaa, bytes[5]);
-            Assert.AreEqual(0xbb, bytes[6]);
-            Assert.AreEqual(0x66, bytes[7]);
+            Assert.AreEqual(0x66, bytes[6]);
+            Assert.AreEqual(0xbb, bytes[7]);
             Assert.AreEqual(0x00, bytes[8]);
         }
 
