@@ -111,9 +111,7 @@ namespace GlowBeanGlow.Api
             if (stack.Count == 0)
             {
                 //Finalize program
-                var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
-                stopCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStop;
-                _device.WriteFeatureData(stopCommand.GetReportData());
+                SendProgramStopCommand();
                 return;
             }
 
@@ -123,10 +121,26 @@ namespace GlowBeanGlow.Api
                               {
                                   if (!success)
                                   {
+                                      // 
+                                      var stopSuccess = SendProgramStopCommand();
+
+                                      if (!stopSuccess)
+                                      {
+                                          throw new ApplicationException("Program Write failed. Device in unknown state.");
+                                      }
+
                                       throw new ApplicationException("Program Write failed.");
+                                      
                                   }
                                   WriteProgramData(stack);
                               });
+        }
+
+        private bool SendProgramStopCommand()
+        {
+            var stopCommand = new SetFeatureReport {Command = SetFeatureCommands.ChangeFeatureMode};
+            stopCommand.CommandData[0] = (byte) FeatureModeOptions.StoreProgramStop;
+            return _device.WriteFeatureData(stopCommand.GetReportData());
         }
 
         private void DeviceAttachedHandler()
@@ -267,6 +281,7 @@ namespace GlowBeanGlow.Api
             if ((tempLowByte & 0x10) > 0) { tempC += 0.125F; }
             if ((tempLowByte & 0x20) > 0) { tempC += 0.25F; }
             if ((tempLowByte & 0x40) > 0) { tempC += 0.5F; }
+
             
             //°C  x  9/5 + 32 = °F
             float tempF = tempC*9/5 + 32;

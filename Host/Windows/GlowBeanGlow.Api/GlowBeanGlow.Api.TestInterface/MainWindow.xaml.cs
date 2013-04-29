@@ -95,11 +95,12 @@ namespace GlowBeanGlow.Api.TestInterface
             var configuration = _usbDriver.GetDeviceConfiguration();
             if (configuration == null) return;
 
-            var configOut = string.Format("Offline Red: \t{0}\nOffline Green: \t{1}\nOffline Blue: \t{2}\nMax instructions: \t{3}",
+            var configOut = string.Format("Offline Red: \t{0}\nOffline Green: \t{1}\nOffline Blue: \t{2}\nMax instructions: \t{3}\nTemp Device ID: \t{4}",
                                           configuration.OfflineColor.Red,
                                           configuration.OfflineColor.Green,
                                           configuration.OfflineColor.Blue,
-                                          configuration.MaxInstructions);
+                                          configuration.MaxInstructions,
+                                          configuration.TempDeviceId);
             MessageBox.Show(configOut);
         }
 
