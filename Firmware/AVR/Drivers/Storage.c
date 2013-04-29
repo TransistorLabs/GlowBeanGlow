@@ -5,6 +5,7 @@
  */ 
 
 #include "Storage.h"
+#include "TempDriver.h"
 #include <avr/eeprom.h>
 
 // Define EEPROM locations
@@ -18,13 +19,16 @@ Instructions_Instruction STORAGEMEMORY StorageConfig_Instructions[STORAGE_MAXINS
 void Storage_GetSettings(Storage_SettingsResponse * const settingsData)
 {
 	uint8_t red, green, blue;
+	uint16_t tempId;
 	red = eeprom_read_byte(&StorageConfig_StaticRed);
 	green = eeprom_read_byte(&StorageConfig_StaticGreen);
 	blue = eeprom_read_byte(&StorageConfig_StaticBlue);
+	tempId = TempDriver_GetMfgId();
 	
 	settingsData->StaticRed		= red;
 	settingsData->StaticGreen	= green;
 	settingsData->StaticBlue	= blue;
+	settingsData->TempDeviceId  = tempId;
 	settingsData->MaxInstructions = STORAGE_MAXINSTRUCTIONS;
 }
 

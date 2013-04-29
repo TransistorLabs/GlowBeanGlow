@@ -24,5 +24,8 @@
 	void OfflineMode_Init(void);
 	void OfflineMode_GetNextFrame(LedDriver_OneColorFrame * const frameData );
 	void OfflineMode_SetNextOfflineMode(void);
+	
+	void OfflineMode_ProcessButtonPressUserA(void);
+	void OfflineMode_ProcessButtonPressUserB(void);
 
 #endif /* OFFLINEMODE_H_ */

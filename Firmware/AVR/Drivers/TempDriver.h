@@ -44,7 +44,12 @@
 	void TempDriver_GetTempDataStructure(TempDriver_TemperatureData * const tempData);
 	
 	// returns the current calculated Celsius value
-	uint8_t TempDriver_GetTempC(void);
+	float TempDriver_GetTempC(void);
 
+	// returns the current calculated Fahrenheit value
+	float TempDriver_GetTempF(void);
+	
+	// Get the mfg id
+	uint16_t TempDriver_GetMfgId(void);
 
 #endif /* TEMPDRIVER_H_ */

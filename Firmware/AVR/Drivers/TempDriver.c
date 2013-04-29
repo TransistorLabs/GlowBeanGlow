@@ -10,6 +10,7 @@
 
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <util/atomic.h>
 
 // The TempReadDelayMs defines the number of milliseconds between
 // actual sensor reads.  The data itself is "cached" for retrieval by
@@ -18,15 +19,14 @@
 // The conversion time for the LM74 is typically 280ms, with a max of 425ms
 // Initial value for the counter is 12c, or 300 ms nominal, 
 
-
+static uint16_t mfgId = 0x0000;
 const static uint16_t TempReadDelayMs = 0x03e8;
 static volatile uint16_t readDelayMsCounter = 0x0001;
 static volatile bool shouldReadTemp = true;
 
 static TempDriver_TemperatureData currentTempData;
 
-// initialize to 21 degrees c, or ~70 degrees f
-static uint8_t currentTempC = 0x15;
+static float currentTempC = 21;
 
 void TempDriver_Init(void)
 {
@@ -34,10 +34,9 @@ void TempDriver_Init(void)
 	SETPINDIRECTION_OUTPUT(SPI_PORTDIRECTION, SPI_MOSI);
 	SETPINDIRECTION_OUTPUT(SPI_PORTDIRECTION, SPI_SCK);
 	SETPINDIRECTION_OUTPUT(TEMP_CHIPSELECT_DIRECTION, TEMP_CHIPSELECT);
-	
-	
 	EnableSPIMaster_Div16();
-	//SPI_SetCPOLHigh();
+	
+	InitMgfId();
 }
 
 void TempDriver_MillisecondTask(void)
@@ -54,21 +53,19 @@ void TempDriver_Task(void)
 {
 	if(shouldReadTemp)
 	{
-		// Note: actual outgoing data doesn't matter, this just triggers
-		//	the transaction. The LM74 ignores the incoming data during
-		//	the first two bytes of communication
-		// We'll just send 0x00, since in theory it saves (some?) current
-		// and probably won't induce noise
+		// Bring the device out of shutdown
+		Shutdown(false);
+		
 		uint8_t highByte;
 		uint8_t lowByte;
 		
 		Temp_SelectChip();
 		
-		SPI_DATA = 0x00;
+		SPI_DATA = 0x01;
 		WaitForSPI_XferComplete();
 		highByte = SPI_DATA;
 		
-		SPI_DATA = 0x00;
+		SPI_DATA = 0x01;
 		WaitForSPI_XferComplete();
 		lowByte = SPI_DATA;
 		
@@ -79,13 +76,25 @@ void TempDriver_Task(void)
 		
 		if(currentTempData.ValidData)
 		{
-			float tc = currentTempData.WholeNumberData;
-			currentTempC = tc;
+			uint8_t tempWhole = currentTempData.RawDataHigh << 1;
+			currentTempC = (float)tempWhole;
+			
+			if ((currentTempData.FractionData & 0x01) > 0) { currentTempC += 0.0625F; }
+			if ((currentTempData.FractionData & 0x02) > 0) { currentTempC += 0.125F; }
+			if ((currentTempData.FractionData & 0x04) > 0) { currentTempC += 0.25F; }
+            if ((currentTempData.FractionData & 0x08) > 0) { currentTempC += 0.5F; }
+			
+			// If we got valid data, shut down the device
+			Shutdown(true);
 		}
-		
 		
 		shouldReadTemp = false;
 	}
+}
+
+uint16_t TempDriver_GetMfgId(void)
+{
+	return mfgId;
 }
 
 void TempDriver_GetTempDataStructure(TempDriver_TemperatureData * const tempData)
@@ -93,7 +102,63 @@ void TempDriver_GetTempDataStructure(TempDriver_TemperatureData * const tempData
 	*tempData = currentTempData;
 }
 
-uint8_t TempDriver_GetTempC(void)
+float TempDriver_GetTempC(void)
 {
 	return currentTempC;
+}
+
+float TempDriver_GetTempF(void)
+{
+	return currentTempC*9/5 + 32;
+}
+
+void Shutdown(bool shutdown)
+{
+	Temp_SelectChip();
+
+	if(shutdown == true)
+	{
+		SPI_DATA = 0xff;
+		WaitForSPI_XferComplete();
+		SPI_DATA = 0xff;
+	}
+	else
+	{
+		SPI_DATA = 0x00;
+		WaitForSPI_XferComplete();
+		SPI_DATA = 0x00;
+	}
+	
+	WaitForSPI_XferComplete();
+	Temp_DeselectChip();
+}
+
+void InitMgfId(void)
+{
+	uint8_t high, low;
+	uint16_t output = 0;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
+		Shutdown(true);
+		
+		Temp_SelectChip();	
+		
+		SPI_DATA = 0xff;
+		WaitForSPI_XferComplete();
+		high = SPI_DATA;
+		
+		SPI_DATA = 0xff;
+		WaitForSPI_XferComplete();
+		low = SPI_DATA;
+	
+		Temp_DeselectChip();
+	}
+	
+	mfgId = high;
+	mfgId <<= 8;
+	mfgId |= low;
+	
+	// force bits 0 and 1 to zero, as
+	// these aren't part of mfg id
+	mfgId &= 0xfffc;
 }

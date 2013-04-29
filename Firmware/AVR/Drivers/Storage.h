@@ -22,10 +22,9 @@
 		uint8_t StaticRed;
 		uint8_t StaticGreen;
 		uint8_t StaticBlue;
-		uint8_t ReservedA;
-		uint8_t ReservedB;
+		uint16_t TempDeviceId;
 		uint16_t MaxInstructions;
-		uint8_t ReservedC;
+		uint8_t ReservedA;
 	} Storage_SettingsResponse;
 	
 			

@@ -172,6 +172,16 @@ void EVENT_InputDriver_ButtonDown(uint8_t buttonMask)
 {
 	ButtonMaskRaw = buttonMask;
 	ButtonPressedMask |= buttonMask;
+	
+	if(INPUTDRIVER_USERASWITCHKEYMASK(buttonMask) && ApplicationMode == ApplicationMode_UsbOffline)
+	{
+		OfflineMode_ProcessButtonPressUserA();
+	}
+	
+	if(INPUTDRIVER_USERBSWITCHKEYMASK(buttonMask) && ApplicationMode == ApplicationMode_UsbOffline)
+	{
+		OfflineMode_ProcessButtonPressUserB();
+	}
 }
 
 /************************************************************************/

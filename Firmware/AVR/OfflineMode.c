@@ -7,7 +7,9 @@
 #include "OfflineMode.h"
 #include "Instructions.h"
 #include "Drivers/Storage.h"
+#include "Drivers/TempDriver.h"
 #include "TransistorLabs/common.h"
+#include <stdlib.h>
 
 static OfflineMode_ModeOptions OfflineMode = OfflineMode_Static;
 static volatile Instructions_Instruction currentInstruction;
@@ -122,35 +124,47 @@ static void GetNextFrame_StaticMode(LedDriver_OneColorFrame * const frameData)
 	frameData->MillisecondsHold = 0x00ff;
 }
 
-//static uint8_t tempTestValue = 0;
-//static uint8_t tempOutputValue = 0;
+static uint8_t currentTempRed = 0;
+static uint8_t currentTempGreen = 127;
+static uint8_t currentTempBlue = 0;
+static float nominalTemp = 72;
 static void GetNextFrame_TempMode(LedDriver_OneColorFrame * const frameData)
 {
-	//tempTestValue++;
-	//tempOutputValue = TempDriver_LoopbackTest(tempTestValue);
-	//
-	//tempOutputValue = TempDriver_LoopbackTest(tempTestValue);
-	//
-	//tempOutputValue = TempDriver_LoopbackTest(tempTestValue);
-	//
-	//tempOutputValue = TempDriver_LoopbackTest(tempTestValue);
-	//
-	//if(tempOutputValue == tempTestValue)
-	//{
-		//frameData->Red		= tempTestValue;
-		//frameData->Green	= 10;
-		//frameData->Blue		= 255-tempTestValue;
-	//}
-	//else
-	{
-		frameData->Red		= 0xff;
-		frameData->Green	= 0x00;
-		frameData->Blue		= 0xff;	
-	}
-	// Set the frame data
+	float f = 72;
+	f = TempDriver_GetTempF();
 	
-	frameData->LedState.RawData = 0x5555;
-	frameData->MillisecondsHold = 0x0001;
+	float delta = f - nominalTemp;
+	float red = 0;
+	float blue = 0;
+	if(delta > 0)
+	{
+		red = 0 + (delta * 20);
+		if(red > 255) red = 255;
+	}
+	
+	if(delta < 0)
+	{
+		blue = 0 + ((delta * -1) * 20);
+		if(blue > 255) blue = 255;
+	}
+	
+	float green = 127 - abs(delta) * 20;
+	if(green < 0) green = 0;
+	
+	if(red < currentTempRed) --currentTempRed;
+	if(green < currentTempGreen) --currentTempGreen;
+	if(blue < currentTempBlue) --currentTempBlue;
+	
+	if(red > currentTempRed) ++currentTempRed;
+	if(green > currentTempGreen) ++currentTempGreen;
+	if(blue > currentTempBlue) ++currentTempBlue;
+	
+	frameData->Red		= (uint8_t)currentTempRed;
+	frameData->Green	= (uint8_t)currentTempGreen;
+	frameData->Blue		= (uint8_t)currentTempBlue;
+	
+	frameData->LedState.RawData = 0xffff;
+	frameData->MillisecondsHold = 0x0008;
 }
 
 static void GetNextFrame_PulseMode(LedDriver_OneColorFrame * const frameData)
@@ -369,6 +383,7 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 		}			
 	}
 }
+
 static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData)
 {
 	frameData->Red		= 0x00;
@@ -376,4 +391,18 @@ static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData)
 	frameData->Blue		= 0x00;
 	frameData->LedState.RawData = 0x0000;
 	frameData->MillisecondsHold = 0x0000;
+}
+
+void OfflineMode_ProcessButtonPressUserA(void)
+{
+	if(OfflineMode == OfflineMode_Temp)
+	{
+		nominalTemp = TempDriver_GetTempF();
+	}
+	
+}
+
+void OfflineMode_ProcessButtonPressUserB(void)
+{
+	
 }
