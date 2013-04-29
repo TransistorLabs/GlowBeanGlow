@@ -95,11 +95,12 @@ namespace GlowBeanGlow.Api.TestInterface
             var configuration = _usbDriver.GetDeviceConfiguration();
             if (configuration == null) return;
 
-            var configOut = string.Format("Offline Red: \t{0}\nOffline Green: \t{1}\nOffline Blue: \t{2}\nMax instructions: \t{3}",
+            var configOut = string.Format("Offline Red: \t{0}\nOffline Green: \t{1}\nOffline Blue: \t{2}\nMax instructions: \t{3}\nTemp Device ID: \t{4}",
                                           configuration.OfflineColor.Red,
                                           configuration.OfflineColor.Green,
                                           configuration.OfflineColor.Blue,
-                                          configuration.MaxInstructions);
+                                          configuration.MaxInstructions,
+                                          configuration.TempDeviceId);
             MessageBox.Show(configOut);
         }
 
@@ -219,7 +220,7 @@ namespace GlowBeanGlow.Api.TestInterface
 
             instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0200 } });
             instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0400 } });
-
+            instructions.Add(new JumpToInstruction{ JumpTargetIndex = 6});
 
             _usbDriver.WriteAnimationProgram(instructions);
         }

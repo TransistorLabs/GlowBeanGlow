@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LedStateTests.cs" />
     <Compile Include="FullColorLiveFrameTests.cs" />
+    <Compile Include="JumpToTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlowBeanGlow.Api\GlowBeanGlow.Api.csproj">
