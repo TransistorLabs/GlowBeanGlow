@@ -68,6 +68,13 @@ void OfflineMode_SetNextOfflineMode(void)
 	InitCurrentMode();
 }
 
+void OfflineMode_StartProgramPlay(void)
+{
+	OfflineMode = OfflineMode_Animate;
+	InitCurrentMode();
+}
+
+
 static void InitCurrentMode(void)
 {
 	// Get settings from storage

@@ -31,12 +31,6 @@ uint8_t PreviousOutputReportBuffer[sizeof(GlowBean_OutputReport)];
 				.Size                 = GENERIC_EPSIZE,
 				.Banks                = 1,
 			},
-			//.ReportINEndpoint             =
-			//{
-				//.Address              = GENERIC_IN_EPADDR,
-				//.Size                 = GENERIC_EPSIZE,
-				//.Banks                = 1,
-			//},
 			.PrevReportINBuffer           = PreviousOutputReportBuffer,
 			.PrevReportINBufferSize       = sizeof(PreviousOutputReportBuffer),
 		},
@@ -173,12 +167,12 @@ void EVENT_InputDriver_ButtonDown(uint8_t buttonMask)
 	ButtonMaskRaw = buttonMask;
 	ButtonPressedMask |= buttonMask;
 	
-	if(INPUTDRIVER_USERASWITCHKEYMASK(buttonMask) && ApplicationMode == ApplicationMode_UsbOffline)
+	if(INPUTDRIVER_USERASWITCHKEYMASK(buttonMask))
 	{
 		OfflineMode_ProcessButtonPressUserA();
 	}
 	
-	if(INPUTDRIVER_USERBSWITCHKEYMASK(buttonMask) && ApplicationMode == ApplicationMode_UsbOffline)
+	if(INPUTDRIVER_USERBSWITCHKEYMASK(buttonMask))
 	{
 		OfflineMode_ProcessButtonPressUserB();
 	}
@@ -204,7 +198,14 @@ void CALLBACK_LedDriver_GetNextFrame(LedDriver_OneColorFrame * const nextFrame)
 			}
 			else
 			{
-				nextFrame->MillisecondsHold = 0x00ff;
+				if(Features_GetFeatureMode() == FeatureModeOptions_ProgramPlaying)
+				{
+					OfflineMode_GetNextFrame(nextFrame);
+				}
+				else
+				{
+					nextFrame->MillisecondsHold = 0x00ff;
+				}					
 			}
 			break;
 
@@ -344,18 +345,13 @@ void CALLBACK_HID_Device_ProcessHIDReport(USB_ClassInfo_HID_Device_t* const HIDI
 		
 		switch(mode)
 		{
+			case FeatureModeOptions_PlayStoredProgram:
+				break;
+
 			case FeatureModeOptions_StoreProgramInProgress:
 				Features_StoreInstructionData(ReportData);
-				//instruction = (Instructions_Instruction*) ReportData;
+				// break; DEBUG: Falling through allows visualization of feature storage data
 				
-				//if(instruction->InstructionType == InstructionType_SetFrame)
-				//{
-					//Render keyframes while writing
-					//TODO: if time, change this to render a percentage-done 
-					//LedDriver_RenderFrame(ReportData);
-				//}
-				//break;
-
 			case FeatureModeOptions_RenderLiveFrameData:
 			default:
 				LedDriver_RenderFrame(ReportData);

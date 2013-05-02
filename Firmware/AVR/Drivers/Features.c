@@ -6,6 +6,7 @@
 
 #include "Features.h"
 #include "Storage.h"
+#include "OfflineMode.h"
 
 /* Structures */
 typedef struct {
@@ -112,9 +113,14 @@ static void ManageFeatureModeState(void)
 			}			
 			break;
 		
+		case FeatureModeOptions_PlayStoredProgram:
+			OfflineMode_StartProgramPlay();
+			currentFeatureMode = FeatureModeOptions_ProgramPlaying;
+			break;
 			
 		case FeatureModeOptions_StoreProgramInProgress:
 		case FeatureModeOptions_RenderLiveFrameData:
+		
 		default:
 			// do nothing
 			break;

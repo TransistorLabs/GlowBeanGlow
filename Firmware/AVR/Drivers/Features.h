@@ -35,11 +35,16 @@
 		// In this mode, the device will write out the total frame count to memory, then automatically switch to mode RenderCurrentFrameData
 		FeatureModeOptions_StoreProgramStop = 0x02,
 		
+		// In this mode, the stored program can be played while the device is connected to a usb host
+		FeatureModeOptions_PlayStoredProgram = 0x03,
+
 		// Assert End Marker - not a valid value
 		FeatureModeOptions_End,
 		
 		
-		// This mode should not be set directly; this mode is automatically entered after StoreAnimationFrameStart
+		// These modes should not be set directly:
+		FeatureModeOptions_ProgramPlaying = 0xfe,
+		// This mode is automatically entered after StoreAnimationFrameStart
 		FeatureModeOptions_StoreProgramInProgress = 0xff 
 	} Features_ModeOptions;
 
