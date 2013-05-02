@@ -727,6 +727,7 @@
         <Button Content="Full Color Rotate Test" Height="21" Canvas.Left="39" Canvas.Top="131" Width="263" Click="FullColorRotateTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="Spectrum Rotate Test" Height="21" Canvas.Left="161" Canvas.Top="131" Width="141" Click="FullColorSpectrumTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="Write Test Animation" Height="21" Canvas.Left="315" Canvas.Top="196" Width="141" Click="WriteTestAnimation_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Content="Play" Height="21" Canvas.Left="441" Canvas.Top="196" Width="32" Click="PlayButton_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Left" VerticalAlignment="Center" Name="PlayButton"/>
     </Canvas>
 
 </Window>

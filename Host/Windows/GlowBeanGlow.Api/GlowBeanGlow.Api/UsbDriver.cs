@@ -94,8 +94,31 @@ namespace GlowBeanGlow.Api
             }
         }
 
+        public bool StartPlaybackOfStoredProgram()
+        {
+            if (_connectedToDriver && !_isProgramming)
+            {
+                var playCommand = new SetFeatureReport {Command = SetFeatureCommands.ChangeFeatureMode};
+                playCommand.CommandData[0] = (byte) FeatureModeOptions.PlayStoredProgram;
+                return _device.WriteFeatureData(playCommand.GetReportData());
+            }
+            return false;
+        }
+
+        public void StopPlaybackOfStoredProgram()
+        {
+            if (_connectedToDriver && !_isProgramming)
+            {
+                var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
+                stopCommand.CommandData[0] = (byte)FeatureModeOptions.RenderLiveFrameData;
+                _device.WriteFeatureData(stopCommand.GetReportData());
+            }
+        }
+
+        private bool _isProgramming = false;
         public void WriteAnimationProgram(IList<IInstruction> instructions)
         {
+            _isProgramming = true;
             var stack = new Stack<IInstruction>(instructions.Reverse());
             
             // Put device in program mode
@@ -129,7 +152,7 @@ namespace GlowBeanGlow.Api
                                           throw new ApplicationException("Program Write failed. Device in unknown state.");
                                       }
 
-                                      throw new ApplicationException("Program Write failed.");
+                                      //throw new ApplicationException("Program Write failed.");
                                       
                                   }
                                   WriteProgramData(stack);
@@ -140,7 +163,9 @@ namespace GlowBeanGlow.Api
         {
             var stopCommand = new SetFeatureReport {Command = SetFeatureCommands.ChangeFeatureMode};
             stopCommand.CommandData[0] = (byte) FeatureModeOptions.StoreProgramStop;
-            return _device.WriteFeatureData(stopCommand.GetReportData());
+            var result =  _device.WriteFeatureData(stopCommand.GetReportData());
+            _isProgramming = false;
+            return result;
         }
 
         private void DeviceAttachedHandler()
