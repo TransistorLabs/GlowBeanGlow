@@ -115,6 +115,9 @@
 	void LedDriver_TestWhite(void);
 	void LedDriver_TestColor(uint8_t red, uint8_t green, uint8_t blue);
 	
+	// Fading routines
+	void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t durationInMs);
+	
 	
 #endif /* LedDriver_H_ */
  

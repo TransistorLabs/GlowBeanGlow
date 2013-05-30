@@ -14,15 +14,15 @@
 /* PRIVATE VARIABLES                                                    */
 /************************************************************************/
 
-static const uint8_t LedConfig_Pins[PORTCONFIG_LEDCOUNT] 
-	= {	LED0PIN,    LED1PIN,    LED2PIN,    LED3PIN,    
-		LED4PIN,    LED5PIN,    LED6PIN,    LED7PIN,    
-		LED8PIN,    LED9PIN,    LED10PIN};
+static const uint8_t LedConfig_Pins[PORTCONFIG_LEDCOUNT]
+	= {	LED0PIN,    LED1PIN,    LED2PIN,    LED3PIN,
+		LED4PIN,    LED5PIN,    LED6PIN,    LED7PIN,
+		LED8PIN,    LED9PIN,    LED10PIN,	LED11PIN};
 			
 volatile static uint8_t *LedConfig_Ports[PORTCONFIG_LEDCOUNT] 
 	= {	LED0PORT,   LED1PORT,   LED2PORT,   LED3PORT,   
 		LED4PORT,   LED5PORT,   LED6PORT,   LED7PORT,   
-		LED8PORT,   LED9PORT,   LED10PORT};
+		LED8PORT,   LED9PORT,   LED10PORT,	LED11PORT};
 		
 static LedDriver_OneColorFrame currentFrame;
 static LedDriver_FullColorFrame workingFullFrame;
@@ -85,6 +85,7 @@ bool LedDriver_Task(void)
 	}
 	else
 	{
+		// Render full color frame
 		for(i = 0; i < PORTCONFIG_LEDCOUNT; i++)
 		{
 			uint16_t bit = currentFullFrame.LedState.RawData;
@@ -181,6 +182,25 @@ void LedDriver_RenderFrame(const LedDriver_Frame * const frameData)
 	}
 }
 
+static uint8_t fadeRedIncrement = 0x00;
+static uint8_t fadeGreenIncrement = 0x00;
+static uint8_t fadeBlueIncrement = 0x00;
+static uint8_t fadeCount = 0x00;
+
+void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t durationInMs)
+{
+	int8_t redDistance, greenDistance, blueDistance = 0x00;
+	redDistance		= red - currentFrame.Red;
+	greenDistance	= green - currentFrame.Green;
+	blueDistance	= blue - currentFrame.Blue;
+	
+	fadeRedIncrement	= redDistance / durationInMs;
+	fadeGreenIncrement	= greenDistance / durationInMs;
+	fadeBlueIncrement	= blueDistance / durationInMs;
+	
+	fadeCount = durationInMs;
+}
+
 // Can be used to directly override frame data
 void LedDriver_RenderOneColorFrame(uint8_t red, uint8_t green, uint8_t blue, uint16_t ledsMask, uint16_t millisecondHold)
 {
@@ -244,17 +264,29 @@ static void ProcessMillisecondTask(void)
 		
 		if(currentFrameType == LedFrameType_Frame)
 		{
-			if(!currentFrame.MillisecondsHold)
+			if(fadeCount > 0)
 			{
-				if(!LedDriver_CALLBACK_GetNextFrame)
-				{
-					return;
-				}
-				LedDriver_CALLBACK_GetNextFrame(&currentFrame);
+				// handle fades
+				--fadeCount;
+				currentFrame.Red += fadeRedIncrement;
+				currentFrame.Green += fadeGreenIncrement;
+				currentFrame.Blue += fadeBlueIncrement;
 			}
 			else
 			{
-				currentFrame.MillisecondsHold--;
+				// otherwise, normal keyframe-style stuff
+				if(!currentFrame.MillisecondsHold)
+				{
+					if(!LedDriver_CALLBACK_GetNextFrame)
+					{
+						return;
+					}
+					LedDriver_CALLBACK_GetNextFrame(&currentFrame);
+				}
+				else
+				{
+					currentFrame.MillisecondsHold--;
+				}	
 			}
 		}
 	}

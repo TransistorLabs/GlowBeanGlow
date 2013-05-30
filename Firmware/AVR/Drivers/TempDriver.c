@@ -19,14 +19,15 @@
 // The conversion time for the LM74 is typically 280ms, with a max of 425ms
 // Initial value for the counter is 12c, or 300 ms nominal, 
 
-static uint16_t mfgId = 0x0000;
 const static uint16_t TempReadDelayMs = 0x03e8;
 static volatile uint16_t readDelayMsCounter = 0x0001;
 static volatile bool shouldReadTemp = true;
 
 static TempDriver_TemperatureData currentTempData;
 
-static float currentTempC = 21;
+static float currentTempC = 21.1111; // ~70 degrees F
+
+void Shutdown(bool shutdown);
 
 void TempDriver_Init(void)
 {
@@ -35,8 +36,6 @@ void TempDriver_Init(void)
 	SETPINDIRECTION_OUTPUT(SPI_PORTDIRECTION, SPI_SCK);
 	SETPINDIRECTION_OUTPUT(TEMP_CHIPSELECT_DIRECTION, TEMP_CHIPSELECT);
 	EnableSPIMaster_Div16();
-	
-	InitMgfId();
 }
 
 void TempDriver_MillisecondTask(void)
@@ -92,11 +91,6 @@ void TempDriver_Task(void)
 	}
 }
 
-uint16_t TempDriver_GetMfgId(void)
-{
-	return mfgId;
-}
-
 void TempDriver_GetTempDataStructure(TempDriver_TemperatureData * const tempData)
 {
 	*tempData = currentTempData;
@@ -131,34 +125,4 @@ void Shutdown(bool shutdown)
 	
 	WaitForSPI_XferComplete();
 	Temp_DeselectChip();
-}
-
-void InitMgfId(void)
-{
-	uint8_t high, low;
-	uint16_t output = 0;
-	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-	{
-		Shutdown(true);
-		
-		Temp_SelectChip();	
-		
-		SPI_DATA = 0xff;
-		WaitForSPI_XferComplete();
-		high = SPI_DATA;
-		
-		SPI_DATA = 0xff;
-		WaitForSPI_XferComplete();
-		low = SPI_DATA;
-	
-		Temp_DeselectChip();
-	}
-	
-	mfgId = high;
-	mfgId <<= 8;
-	mfgId |= low;
-	
-	// force bits 0 and 1 to zero, as
-	// these aren't part of mfg id
-	mfgId &= 0xfffc;
 }

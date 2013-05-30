@@ -124,20 +124,21 @@ static void InitCurrentMode(void)
 static void GetNextFrame_StaticMode(LedDriver_OneColorFrame * const frameData)
 {
 	// Set the frame data
-	frameData->Red		= staticModeRed;
-	frameData->Green	= staticModeGreen;
-	frameData->Blue		= staticModeBlue;
+	frameData->Red		= 0x00;
+	frameData->Green	= 0x00;
+	frameData->Blue		= 0x00;
 	frameData->LedState.RawData = 0xffff;
 	frameData->MillisecondsHold = 0x00ff;
+	LedDriver_FadeToColor(staticModeRed, staticModeGreen, staticModeBlue, 0xff);
 }
 
 static uint8_t currentTempRed = 0;
 static uint8_t currentTempGreen = 127;
 static uint8_t currentTempBlue = 0;
-static float nominalTemp = 72;
+static float nominalTemp = 70;
 static void GetNextFrame_TempMode(LedDriver_OneColorFrame * const frameData)
 {
-	float f = 72;
+	float f = 70;
 	f = TempDriver_GetTempF();
 	
 	float delta = f - nominalTemp;
@@ -335,11 +336,11 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 												
 						if(currentInstruction.IncrementFrame.LedShiftType == Instructions_ShiftLedLeft)
 						{
-							frameData->LedState.RawData = Rotate11BitsLeft(frameData->LedState.RawData);
+							frameData->LedState.RawData = Rotate12BitsLeft(frameData->LedState.RawData);
 						}							
 						else
 						{
-							frameData->LedState.RawData = Rotate11BitsRight(frameData->LedState.RawData);
+							frameData->LedState.RawData = Rotate12BitsRight(frameData->LedState.RawData);
 						}
 					}
 				}

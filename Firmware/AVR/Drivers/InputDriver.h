@@ -12,7 +12,6 @@
 	
 	#define INPUTDRIVER_MODESWITCHKEYMASK(buttonUpMask) (_BV(SW_MODE) & buttonUpMask)
 	#define INPUTDRIVER_USERASWITCHKEYMASK(buttonUpMask) (_BV(SW_USERA) & buttonUpMask)
-	#define INPUTDRIVER_USERBSWITCHKEYMASK(buttonUpMask) (_BV(SW_USERB) & buttonUpMask)
 
 	void InputDriver_Init(void (*buttonDownEvent)(uint8_t buttonMask), void (*buttonUpEvent)(uint8_t buttonMask));
 	void InputDriver_Task(void);

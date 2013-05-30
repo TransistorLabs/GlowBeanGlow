@@ -48,8 +48,5 @@
 
 	// returns the current calculated Fahrenheit value
 	float TempDriver_GetTempF(void);
-	
-	// Get the mfg id
-	uint16_t TempDriver_GetMfgId(void);
 
 #endif /* TEMPDRIVER_H_ */

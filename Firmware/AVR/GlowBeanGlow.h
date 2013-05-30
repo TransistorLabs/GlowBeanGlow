@@ -4,7 +4,6 @@
  *  Copyright (c) 2013 Paul Trandem
  */ 
 
-
 #ifndef GLOWBEANGLOW_H_
 #define GLOWBEANGLOW_H_
 

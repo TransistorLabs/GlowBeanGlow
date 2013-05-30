@@ -36,21 +36,17 @@ void PortConfig_InitHardware(void)
 	// Configure port outputs (1)
 	DDRC |= _BV(PC2) | _BV(PC4) | _BV(PC5) | _BV(PC6) | _BV(PC7);
 	DDRB |= _BV(PB0) | _BV(PB4) | _BV(PB5) | _BV(PB6) | _BV(PB7);
-	DDRD |= _BV(PD0) | _BV(PD4) | _BV(PD5) | _BV(PD1);
+	DDRD |= _BV(PD0) | _BV(PD4) | _BV(PD5) | _BV(PD1) | _BV(PD7);
 	
 	// enable PWM - using system clock, no prescaler
 	TCCR1B |= _BV(CS10);
 	
 	// Configure the input hardware
-	
 	// Configure switch 1 as input (DDRx = 0)
 	SETPINDIRECTION_INPUT(SWITCHDIRECTION, SW_MODE);
 	SETPINDIRECTION_INPUT(SWITCHDIRECTION, SW_USERA);
-	SETPINDIRECTION_INPUT(SWITCHDIRECTION, SW_USERB);
-
+	
 	// Turn on internal pull-up (1)
 	SETINTERNALPULLUP_ON(SWITCHPORT, SW_MODE );
 	SETINTERNALPULLUP_ON(SWITCHPORT, SW_USERA );
-	SETINTERNALPULLUP_ON(SWITCHPORT, SW_USERB );
-	
 }

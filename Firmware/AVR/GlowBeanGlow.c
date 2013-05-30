@@ -75,7 +75,8 @@ void ApplicationMode_Task(void)
 	{
 		case ApplicationMode_UsbConnected:
 			// Usb Connected, but not yet ready to go
-			LedDriver_RenderOneColorFrame(0x00, 0x00, 0xff, 0xffff, 0x0000);
+			LedDriver_RenderOneColorFrame(0x00, 0x00, 0x00, 0xffff, 0x0000);
+			LedDriver_FadeToColor(0x00, 0x00, 0xff, 0xff);
 			break;
 
 		case ApplicationMode_UsbActive:
@@ -171,11 +172,6 @@ void EVENT_InputDriver_ButtonDown(uint8_t buttonMask)
 	{
 		OfflineMode_ProcessButtonPressUserA();
 	}
-	
-	if(INPUTDRIVER_USERBSWITCHKEYMASK(buttonMask))
-	{
-		OfflineMode_ProcessButtonPressUserB();
-	}
 }
 
 /************************************************************************/
@@ -205,7 +201,7 @@ void CALLBACK_LedDriver_GetNextFrame(LedDriver_OneColorFrame * const nextFrame)
 				else
 				{
 					nextFrame->MillisecondsHold = 0x00ff;
-				}					
+				}
 			}
 			break;
 

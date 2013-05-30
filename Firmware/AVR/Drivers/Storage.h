@@ -22,7 +22,8 @@
 		uint8_t StaticRed;
 		uint8_t StaticGreen;
 		uint8_t StaticBlue;
-		uint16_t TempDeviceId;
+		uint8_t LedCount;
+		uint8_t SwitchCount;
 		uint16_t MaxInstructions;
 		uint8_t ReservedA;
 	} Storage_SettingsResponse;
