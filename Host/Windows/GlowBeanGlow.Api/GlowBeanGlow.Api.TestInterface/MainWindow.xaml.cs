@@ -232,5 +232,25 @@ namespace GlowBeanGlow.Api.TestInterface
 
             _usbDriver.WriteAnimationProgram(instructions);
         }
+
+        private bool _isPlaying = false;
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isPlaying)
+            {
+                _usbDriver.StopPlaybackOfStoredProgram();
+                _isPlaying = false;
+                PlayButton.Content = "Play";
+            }
+            else
+            {
+                var started = _usbDriver.StartPlaybackOfStoredProgram();
+                if (started)
+                {
+                    _isPlaying = true; 
+                    PlayButton.Content = "Stop";
+                }
+            }
+        }
     }
 }
