@@ -21,13 +21,19 @@ namespace GlowBeanGlow.Api.TestInterface
             InitializeComponent();
             _usbDriver = new UsbDriver();
             _usbDriver.Connect();
+            _usbDriver.OnReportChange += (bytes) => Dispatcher.Invoke(() =>
+                {
+                    RawByteOutput.Text = "";
+                    foreach (var b in bytes)
+                    {
+                        RawByteOutput.Text += string.Format("{0:X2} ", b);
+                    }
+                });
+
             _usbDriver.OnTempChange += OnTempChange;
 
             _usbDriver.OnModeButtonPressed += () => Dispatcher.Invoke(() => { Button1.Style = Resources["ButtonOnStyle"] as Style; });
             _usbDriver.OnModeButtonReleased += () => Dispatcher.Invoke(() => Button1.Style = Resources["ButtonOffStyle"] as Style);
-
-            _usbDriver.OnUser1ButtonPressed += () => Dispatcher.Invoke(() => { Button2.Style = Resources["ButtonOnStyle"] as Style; });
-            _usbDriver.OnUser1ButtonReleased += () => Dispatcher.Invoke(() => Button2.Style = Resources["ButtonOffStyle"] as Style);
 
             _usbDriver.OnUser2ButtonPressed += () => Dispatcher.Invoke(() => { Button3.Style = Resources["ButtonOnStyle"] as Style; });
             _usbDriver.OnUser2ButtonReleased += () => Dispatcher.Invoke(() => Button3.Style = Resources["ButtonOffStyle"] as Style);
@@ -82,6 +88,7 @@ namespace GlowBeanGlow.Api.TestInterface
             _frame.Leds[8] = Led9.IsChecked.Value;
             _frame.Leds[9] = Led10.IsChecked.Value;
             _frame.Leds[10] = Led11.IsChecked.Value;
+            _frame.Leds[11] = Led12.IsChecked.Value;
             RenderFrame();
         }
 
@@ -127,6 +134,7 @@ namespace GlowBeanGlow.Api.TestInterface
                 _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x00, Blue = 0xff });
                 _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x33, Green = 0x00, Blue = 0xff });
                 _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x00, Blue = 0xdd });
+                _fullColorFrame.Colors.Add(new Display.RgbColor { Red = 0x99, Green = 0x00, Blue = 0x99 });
             }
             else
             {
@@ -142,8 +150,7 @@ namespace GlowBeanGlow.Api.TestInterface
         {
             if (_fullColorSpectrumFrame == null)
             {
-                _fullColorSpectrumFrame = new FullColorLiveFrame();
-                _fullColorSpectrumFrame.Leds.LedRawBits = 0xffff;
+                _fullColorSpectrumFrame = new FullColorLiveFrame {Leds = {LedRawBits = 0xffff}};
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0xff, Green = 0x00, Blue = 0x00 });
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0xaa, Green = 0x10, Blue = 0x00 });
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x88, Green = 0x44, Blue = 0x00 });
@@ -155,6 +162,7 @@ namespace GlowBeanGlow.Api.TestInterface
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x00, Green = 0x00, Blue = 0xff });
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x33, Green = 0x00, Blue = 0xff });
                 _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x66, Green = 0x00, Blue = 0xdd });
+                _fullColorSpectrumFrame.Colors.Add(new Display.RgbColor { Red = 0x99, Green = 0x00, Blue = 0x99 });
             }
             else
             {
@@ -178,49 +186,49 @@ namespace GlowBeanGlow.Api.TestInterface
                     ColorIncrementDelayMs = 4
                 });
             
-            instructions.Add(new IncrementFrameInstruction
-            {
-                BlueIncrement = 1,
-                GreenIncrement = -2,
-                RedIncrement = 4,
-                ColorIncrementCount = 127,
-                ColorIncrementDelayMs = 4,
-                LedShiftCount = 33,
-                LedShiftDelayMs = 6,
-                LedShiftType = LedShiftOptions.ShiftLedRight
-            });
+            //instructions.Add(new IncrementFrameInstruction
+            //{
+            //    BlueIncrement = 1,
+            //    GreenIncrement = -2,
+            //    RedIncrement = 4,
+            //    ColorIncrementCount = 127,
+            //    ColorIncrementDelayMs = 4,
+            //    LedShiftCount = 33,
+            //    LedShiftDelayMs = 6,
+            //    LedShiftType = LedShiftOptions.ShiftLedRight
+            //});
 
-            instructions.Add(new IncrementFrameInstruction
-            {
-                BlueIncrement = -1,
-                GreenIncrement = 4,
-                RedIncrement = -2,
-                ColorIncrementCount = 33,
-                ColorIncrementDelayMs = 4,
-                LedShiftCount = 33,
-                LedShiftDelayMs = 4,
-                LedShiftType = LedShiftOptions.ShiftLedLeft
-            });
+            //instructions.Add(new IncrementFrameInstruction
+            //{
+            //    BlueIncrement = -1,
+            //    GreenIncrement = 4,
+            //    RedIncrement = -2,
+            //    ColorIncrementCount = 33,
+            //    ColorIncrementDelayMs = 4,
+            //    LedShiftCount = 33,
+            //    LedShiftDelayMs = 4,
+            //    LedShiftType = LedShiftOptions.ShiftLedLeft
+            //});
 
-            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x03eb, Leds = new LedState { LedRawBits = 0x0100 } });
+            //instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x03eb, Leds = new LedState { LedRawBits = 0x0100 } });
 
-            instructions.Add(new IncrementFrameInstruction
-            {
-                LedShiftCount = 33,
-                LedShiftDelayMs = 10,
-                LedShiftType = LedShiftOptions.ShiftLedRight
-            });
+            //instructions.Add(new IncrementFrameInstruction
+            //{
+            //    LedShiftCount = 33,
+            //    LedShiftDelayMs = 10,
+            //    LedShiftType = LedShiftOptions.ShiftLedRight
+            //});
 
-            instructions.Add(new IncrementFrameInstruction
-            {
-                LedShiftCount = 33,
-                LedShiftDelayMs = 10,
-                LedShiftType = LedShiftOptions.ShiftLedLeft
-            });
+            //instructions.Add(new IncrementFrameInstruction
+            //{
+            //    LedShiftCount = 33,
+            //    LedShiftDelayMs = 10,
+            //    LedShiftType = LedShiftOptions.ShiftLedLeft
+            //});
 
-            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0200 } });
-            instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0400 } });
-            instructions.Add(new JumpToInstruction{ JumpTargetIndex = 6});
+            //instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0200 } });
+            //instructions.Add(new SetFrameInstruction { Color = new RgbColor { Red = 0x00, Green = 0xff, Blue = 0x00 }, MillisecondsHold = 0x0300, Leds = new LedState { LedRawBits = 0x0400 } });
+            //instructions.Add(new JumpToInstruction{ JumpTargetIndex = 6});
 
             _usbDriver.WriteAnimationProgram(instructions);
         }

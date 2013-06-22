@@ -678,10 +678,9 @@
         <Ellipse Height="99.334" Canvas.Left="340.176" Stroke="#FF3A3A3A" Canvas.Top="87.67" Width="99.333" SnapsToDevicePixels="True"/>
         <TextBlock x:Name="DegreeOutputF" TextWrapping="Wrap" Width="211" Height="127" TextAlignment="Center" FontSize="96" TextDecorations="{x:Null}" Foreground="#FF00FF51" VerticalAlignment="Top" Text="00.0" Canvas.Top="24" Canvas.Left="15"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Bottom" Width="106.876" Height="127.39" TextAlignment="Center" Foreground="#FF00FF51" FontSize="96" FontFamily="Segoe UI Light" LineHeight="1" Canvas.Left="195" Canvas.Top="24.61" Text="°F"/>
-        <TextBlock x:Name="RawByteOutput" TextWrapping="Wrap" FontSize="13.333" Margin="291,9,9,280" RenderTransformOrigin="0.609,4.615" Foreground="White" FontFamily="Consolas"><Run Text="FF FF FF FF FF FF FF FF"/></TextBlock>
+        <TextBlock x:Name="RawByteOutput" TextWrapping="Wrap" FontSize="13.333" Margin="291,9,9,280" RenderTransformOrigin="0.609,4.615" Foreground="White" FontFamily="Consolas">FF FF FF FF FF FF FF FF</TextBlock>
         <TextBlock x:Name="DegreeOutputC" TextWrapping="Wrap" Text="00.0000° C" FontSize="26.667" RenderTransformOrigin="2.145,0.752" HorizontalAlignment="Left" VerticalAlignment="Top" Height="61.47" Margin="56.969,10,0,0" Foreground="#FF0C8100"/>
-        <Rectangle x:Name="Button3" HorizontalAlignment="Left" Height="16" Margin="446,30,0,0" Stroke="Black" VerticalAlignment="Top" Width="16" RenderTransformOrigin="0.458,0.479" Style="{DynamicResource ButtonOffStyle}"/>
-        <Rectangle x:Name="Button2" HorizontalAlignment="Left" Height="16" Margin="429,30,0,0" Stroke="Black" VerticalAlignment="Top" Width="16" Style="{DynamicResource ButtonOffStyle}"/>
+        <Rectangle x:Name="Button3" HorizontalAlignment="Left" Height="16" Stroke="Black" VerticalAlignment="Top" Width="16" RenderTransformOrigin="0.458,0.479" Style="{DynamicResource ButtonOffStyle}" Canvas.Left="429" Canvas.Top="30"/>
         <Rectangle x:Name="Button1" HorizontalAlignment="Left" Height="16" Margin="412,30,0,0" Stroke="Black" VerticalAlignment="Top" Width="16" Style="{DynamicResource ButtonOffStyle}"/>
         <TextBlock TextWrapping="Wrap" Text="buttons:" Foreground="#FF7A7A7A" FontFamily="Segoe UI Light" HorizontalAlignment="Right" Width="56" VerticalAlignment="Center" Height="30" Canvas.Left="354.471" Canvas.Top="29.61" FontSize="14" TextAlignment="Right"/>
         <StackPanel Orientation="Vertical" Background="Black" Canvas.Left="39" Canvas.Top="151" Width="262.876" RenderTransformOrigin="0.5,0.5" Height="78.5">
@@ -712,16 +711,17 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center"/>
         </StackPanel>
         <CheckBox x:Name="Led1" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="383.146" Canvas.Top="83.326"/>
-        <CheckBox x:Name="Led2" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="410.141" Canvas.Top="90.654"/>
-        <CheckBox x:Name="Led3" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="428.811" Canvas.Top="111.317"/>
-        <CheckBox x:Name="Led4" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="432.141" Canvas.Top="138.656"/>
-        <CheckBox x:Name="Led5" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="420.147" Canvas.Top="162.658"/>
-        <CheckBox x:Name="Led6" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="397.804" Canvas.Top="178.322"/>
-        <CheckBox x:Name="Led7" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="369.479" Canvas.Top="178.322"/>
-        <CheckBox x:Name="Led8" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="346.148" Canvas.Top="162.658"/>
-        <CheckBox x:Name="Led9" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="333.815" Canvas.Top="138.656"/>
-        <CheckBox x:Name="Led10" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="337.148" Canvas.Top="111.317"/>
-        <CheckBox x:Name="Led11" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="355.148" Canvas.Top="90.654"/>
+        <CheckBox x:Name="Led2" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="407" Canvas.Top="88"/>
+        <CheckBox x:Name="Led3" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="426" Canvas.Top="107"/>
+        <CheckBox x:Name="Led4" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="432" Canvas.Top="131"/>
+        <CheckBox x:Name="Led5" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="426" Canvas.Top="156"/>
+        <CheckBox x:Name="Led6" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="408" Canvas.Top="173"/>
+        <CheckBox x:Name="Led7" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="385" Canvas.Top="180"/>
+        <CheckBox x:Name="Led8" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="359" Canvas.Top="174"/>
+        <CheckBox x:Name="Led9" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="340" Canvas.Top="156"/>
+        <CheckBox x:Name="Led10" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="334" Canvas.Top="131"/>
+        <CheckBox x:Name="Led11" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="340" Canvas.Top="107"/>
+        <CheckBox x:Name="Led12" Unchecked="LedChanged" Checked="LedChanged" Style="{DynamicResource LedSquareToggleStyle}" Canvas.Left="359" Canvas.Top="88"/>
         <Button Content="Show Current Configuration" Height="21" Canvas.Left="315" Canvas.Top="213" Width="149" Click="Configuration_Click" Style="{DynamicResource LinkButton}"/>
         <Button Content="Set as Offline Static Color" Height="21" Canvas.Left="102" Canvas.Top="213" Width="149" Click="SetStatic_Click" Style="{DynamicResource LinkButton}"/>
         <Button Content="Full Color Rotate Test" Height="21" Canvas.Left="39" Canvas.Top="131" Width="263" Click="FullColorRotateTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

@@ -18,7 +18,7 @@
 	typedef enum {
 		LedFrameType_Frame = 0x00,
 		LedFrameType_FullColorFramePart = 0x01,
-		LedFrameType_FullColorLastFramePart = 0x02
+		//LedFrameType_FullColorLastFramePart = 0x02
 	} LedDriver_FrameType;
 
 	
@@ -61,28 +61,29 @@
 	typedef struct {
 		uint8_t RGB[PORTCONFIG_LEDCOUNT][3];
 		LedDriver_LedState LedState;
+		uint16_t MillisecondHold;
 	} LedDriver_FullColorFrame;
 	
 	typedef struct {
 		uint8_t RGBA[3];
 		uint8_t RGBB[3];
-		uint8_t Reserved;
+		uint8_t Data;
 		uint8_t FrameType : 4,
 				FramePage : 4;
 	} LedDriver_FullColorFramePart;
 	
-	typedef struct {
-		uint8_t RGBA[3];
-		LedDriver_LedState LedState;
-		uint16_t MillisecondHold;
-		uint8_t FrameType : 4,
-				FramePage : 4;
-	} LedDriver_FullColorFramePartLast;
+	//typedef struct {
+		//uint8_t RGBAc[3];
+		//LedDriver_LedState LedState;
+		//uint16_t MillisecondHold;
+		//uint8_t FrameType : 4,
+				//FramePage : 4;
+	//} LedDriver_FullColorFramePartLast;
 	
 	typedef union {
 		LedDriver_OneColorFrame Frame;
 		LedDriver_FullColorFramePart FramePart;
-		LedDriver_FullColorFramePartLast LastFramePart;
+//		LedDriver_FullColorFramePartLast LastFramePart;
 		struct {
 			uint32_t Reserved1;
 			uint16_t Reserved2;
@@ -116,7 +117,7 @@
 	void LedDriver_TestColor(uint8_t red, uint8_t green, uint8_t blue);
 	
 	// Fading routines
-	void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t durationInMs);
+	void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint16_t ledState, uint16_t durationInMs);
 	
 	
 #endif /* LedDriver_H_ */

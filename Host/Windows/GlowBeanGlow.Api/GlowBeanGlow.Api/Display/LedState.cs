@@ -9,7 +9,7 @@ namespace GlowBeanGlow.Api.Display
             get
             {
                 // Number of LEDs in the hardware implementation.
-                return 11;
+                return 12;
             }
         }
 

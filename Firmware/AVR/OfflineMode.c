@@ -124,12 +124,12 @@ static void InitCurrentMode(void)
 static void GetNextFrame_StaticMode(LedDriver_OneColorFrame * const frameData)
 {
 	// Set the frame data
-	frameData->Red		= 0x00;
-	frameData->Green	= 0x00;
-	frameData->Blue		= 0x00;
+	//frameData->Red		= 0x00;
+	//frameData->Green	= 0x00;
+	//frameData->Blue		= 0x00;
 	frameData->LedState.RawData = 0xffff;
-	frameData->MillisecondsHold = 0x00ff;
-	LedDriver_FadeToColor(staticModeRed, staticModeGreen, staticModeBlue, 0xff);
+	//frameData->MillisecondsHold = 0x00ff;
+	LedDriver_FadeToColor(staticModeRed, staticModeGreen, staticModeBlue, 0xffff, 0x00ff);
 }
 
 static uint8_t currentTempRed = 0;

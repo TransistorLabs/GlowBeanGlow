@@ -16,6 +16,7 @@ namespace GlowBeanGlow.Api
     {
         private const int VendorId = 0x03EB;
         private const int ProductId = 0x204F;
+        public Action<byte[]> OnReportChange;
         public Action OnModeButtonPressed;
         public Action OnModeButtonReleased;
         public Action<double, double> OnTempChange;
@@ -90,6 +91,7 @@ namespace GlowBeanGlow.Api
                 {
                     var report = new HidReport(9, new HidDeviceData(frame.GetReportDataForPage(i), HidDeviceData.ReadStatus.NoDataRead));
                     _device.WriteReport(report, null);
+                    Thread.Sleep(5);
                 }
             }
         }
@@ -116,6 +118,7 @@ namespace GlowBeanGlow.Api
             }
 
             var topInstruction = stack.Pop();
+            Thread.Sleep(5);
             _device.Write(topInstruction.GetReportData(),
                           (success) =>
                               {
@@ -230,7 +233,9 @@ namespace GlowBeanGlow.Api
                 }
             }
 
+            OnReportChange(reportBytes);
             ProcessTemperature(reportBytes);
+            
             _device.ReadReport(OnReport);
         }
 

@@ -10,6 +10,7 @@ namespace GlowBeanGlow.Api
 {
     public class FullColorLiveFrame
     {
+        private const byte LedFrameTypeFullColorFramePart = 0x01;
         public FullColorLiveFrame()
         {
             Colors = new List<RgbColor>();
@@ -23,37 +24,31 @@ namespace GlowBeanGlow.Api
         {
             var byteArray = new byte[9];
             byteArray[0] = reportId;
+            var index = pageNumber * 2;
 
-            if (pageNumber < 5)
+            switch (pageNumber)
             {
-                var index = pageNumber * 2;
-                byteArray[1] = Colors[index].Red;
-                byteArray[2] = Colors[index].Green;
-                byteArray[3] = Colors[index].Blue;
+                case 0:
+                    byteArray[7] = BitHelpers.GetLowByte(Leds.LedRawBits);
+                    break;
 
-                ++index;
-                byteArray[4] = Colors[index].Red;
-                byteArray[5] = Colors[index].Green;
-                byteArray[6] = Colors[index].Blue;
-
-                byte w = 0x01;
-                w |= Convert.ToByte(pageNumber << 4);
-                byteArray[8] = w;
-                
+                case 1:
+                    byteArray[7] = BitHelpers.GetHighByte(Leds.LedRawBits);
+                    break;
             }
-            else if (pageNumber == 5)
-            {
-                var index = pageNumber * 2;
-                byteArray[1] = Colors[index].Red;
-                byteArray[2] = Colors[index].Green;
-                byteArray[3] = Colors[index].Blue;
-                byteArray[4] = BitHelpers.GetLowByte(Leds.LedRawBits);
-                byteArray[5] = BitHelpers.GetHighByte(Leds.LedRawBits);
 
-                byte w = 0x02;
-                w |= Convert.ToByte(pageNumber << 4);
-                byteArray[8] = w;
-            }
+            byteArray[1] = Colors[index].Red;
+            byteArray[2] = Colors[index].Green;
+            byteArray[3] = Colors[index].Blue;
+
+            ++index;
+            byteArray[4] = Colors[index].Red;
+            byteArray[5] = Colors[index].Green;
+            byteArray[6] = Colors[index].Blue;
+
+            byte w = LedFrameTypeFullColorFramePart;
+            w |= Convert.ToByte(pageNumber << 4);
+            byteArray[8] = w;
 
             return byteArray;
         }

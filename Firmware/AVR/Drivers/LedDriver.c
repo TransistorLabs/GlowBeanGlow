@@ -34,6 +34,19 @@ static uint8_t  lastPin =	LED0PIN;
 static void (*LedDriver_CALLBACK_GetNextFrame)(LedDriver_OneColorFrame * const nextFrame);
 static bool millisecondTimer_Flag = false;
 
+static float fadeRedIncrement = 0x00;
+static float fadeGreenIncrement = 0x00;
+static float fadeBlueIncrement = 0x00;
+
+static float fadeRedCurrent = 0x00;
+static float fadeGreenCurrent = 0x00;
+static float fadeBlueCurrent = 0x00;
+
+static uint8_t fadeRedTarget = 0x00;
+static uint8_t fadeGreenTarget = 0x00;
+static uint8_t fadeBlueTarget = 0x00;
+
+static uint16_t fadeCount = 0x0000;
 
 /************************************************************************/
 /* PRIVATE FUNCTION DECLARATIONS                                        */
@@ -130,66 +143,86 @@ void LedDriver_MillisecondTask(void)
 
 void LedDriver_RenderFrame(const LedDriver_Frame * const frameData)
 {
+	fadeCount = 0;
+	
 	LedDriver_OneColorFrame *frame;
 	LedDriver_FullColorFramePart *framePart;
-	LedDriver_FullColorFramePartLast *lastFramePart;
+	//LedDriver_FullColorFramePartLast *lastFramePart;
 	
-	uint8_t pageIndex;
-	
-	switch(frameData->FrameType)
+	if(frameData->FrameType == LedFrameType_Frame)
 	{
-		case LedFrameType_Frame:
-			frame = (LedDriver_OneColorFrame *) frameData;
-			currentFrame = *frame;
-			currentFrameType = LedFrameType_Frame;
-			break;
+		frame = (LedDriver_OneColorFrame *) frameData;
+		currentFrame = *frame;
+		currentFrameType = LedFrameType_Frame;
+	}		
+	else if (frameData->FrameType == LedFrameType_FullColorFramePart)
+	{
+		uint8_t pageIndex;
+		framePart = (LedDriver_FullColorFramePart*)frameData;
+				
+		if(framePart->FramePage > 5)
+		{ 
+			// invalid frame page; bail.
+			return;
+		}
 		
-		case LedFrameType_FullColorFramePart:
-			{
-				framePart = (LedDriver_FullColorFramePart*)frameData;
+		pageIndex = framePart->FramePage * 2;
+		workingFullFrame.RGB[pageIndex][0] = framePart->RGBA[0];
+		workingFullFrame.RGB[pageIndex][1] = framePart->RGBA[1];
+		workingFullFrame.RGB[pageIndex][2] = framePart->RGBA[2];
 				
-				if(framePart->FramePage > 4)
-				{ 
-					// invalid frame page; bail.
-					// TODO: this should be derived from PORTCONFIG_LEDCOUNT at some point, and not hardcoded.
-					return;
-				}
-				pageIndex = framePart->FramePage * 2;	
-				workingFullFrame.RGB[pageIndex][0] = framePart->RGBA[0];
-				workingFullFrame.RGB[pageIndex][1] = framePart->RGBA[1];
-				workingFullFrame.RGB[pageIndex][2] = framePart->RGBA[2];
-				
-				++pageIndex;
-				workingFullFrame.RGB[pageIndex][0] = framePart->RGBB[0];
-				workingFullFrame.RGB[pageIndex][1] = framePart->RGBB[1];
-				workingFullFrame.RGB[pageIndex][2] = framePart->RGBB[2];
-			}			
-			break;
+		++pageIndex;
+		workingFullFrame.RGB[pageIndex][0] = framePart->RGBB[0];
+		workingFullFrame.RGB[pageIndex][1] = framePart->RGBB[1];
+		workingFullFrame.RGB[pageIndex][2] = framePart->RGBB[2];
 			
-		case LedFrameType_FullColorLastFramePart:
-			{
-				lastFramePart = (LedDriver_FullColorFramePartLast*) frameData;
-				workingFullFrame.RGB[10][0] = lastFramePart->RGBA[0];
-				workingFullFrame.RGB[10][1] = lastFramePart->RGBA[1];
-				workingFullFrame.RGB[10][2] = lastFramePart->RGBA[2];
-				workingFullFrame.LedState.RawData = lastFramePart->LedState.RawData;
+		switch(framePart->FramePage)
+		{
+			case 0:
+				// Low Byte, LED state
+				workingFullFrame.LedState.RawData = (0x00ff & framePart->Data);
+				//workingFullFrame.LedState.RawData = 0xffff;
+				break;
+				
+			case 1:
+				// High Byte, LED state
+				workingFullFrame.LedState.RawData |= (0x00ff & framePart->Data) << 8;
+				break;
+				
+			case 5:
+				// TODO: should this stay hardcoded? is it worth setting from the host?
+				workingFullFrame.MillisecondHold = 0x0004;
 				currentFullFrame = workingFullFrame;
 				currentFrameType = LedFrameType_FullColorFramePart;
-			}			
-			break;
-			
-		
+				break;
+		}
 	}
+			
+	//case LedFrameType_FullColorLastFramePart:
+		//{
+			//lastFramePart = (LedDriver_FullColorFramePartLast*) frameData;
+			//workingFullFrame.RGB[10][0] = lastFramePart->RGBA[0];
+			//workingFullFrame.RGB[10][1] = lastFramePart->RGBA[1];
+			//workingFullFrame.RGB[10][2] = lastFramePart->RGBA[2];
+			//workingFullFrame.LedState.RawData = lastFramePart->LedState.RawData;
+			//currentFullFrame = workingFullFrame;
+			//currentFrameType = LedFrameType_FullColorFramePart;
+		//}			
+		//break;
 }
 
-static uint8_t fadeRedIncrement = 0x00;
-static uint8_t fadeGreenIncrement = 0x00;
-static uint8_t fadeBlueIncrement = 0x00;
-static uint8_t fadeCount = 0x00;
-
-void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t durationInMs)
+void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint16_t ledState, uint16_t durationInMs)
 {
-	int8_t redDistance, greenDistance, blueDistance = 0x00;
+	currentFrame.LedState.RawData = ledState;
+	fadeRedTarget = red;
+	fadeGreenTarget = green;
+	fadeBlueTarget = blue;
+	
+	fadeRedCurrent = currentFrame.Red;
+	fadeGreenCurrent = currentFrame.Green;
+	fadeBlueCurrent = currentFrame.Blue;
+	
+	float redDistance, greenDistance, blueDistance = 0x00;
 	redDistance		= red - currentFrame.Red;
 	greenDistance	= green - currentFrame.Green;
 	blueDistance	= blue - currentFrame.Blue;
@@ -204,6 +237,7 @@ void LedDriver_FadeToColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t dur
 // Can be used to directly override frame data
 void LedDriver_RenderOneColorFrame(uint8_t red, uint8_t green, uint8_t blue, uint16_t ledsMask, uint16_t millisecondHold)
 {
+	fadeCount = 0;
 	currentFrame.Red = red;
 	currentFrame.Green = green;
 	currentFrame.Blue = blue;
@@ -214,6 +248,7 @@ void LedDriver_RenderOneColorFrame(uint8_t red, uint8_t green, uint8_t blue, uin
 
 void LedDriver_Clear(void)
 {
+	fadeCount = 0;
 	currentFrame = (LedDriver_OneColorFrame) {
 		.Red = 0x00,
 		.Blue = 0x00,
@@ -227,6 +262,7 @@ void LedDriver_Clear(void)
 
 void LedDriver_TestWhite(void)
 {
+	fadeCount = 0;
 	currentFrame = (LedDriver_OneColorFrame) {
 		.Red = 0xff,
 		.Blue = 0xff,
@@ -240,6 +276,7 @@ void LedDriver_TestWhite(void)
 
 void LedDriver_TestColor(uint8_t red, uint8_t green, uint8_t blue)
 {
+	fadeCount = 0;
 	currentFrame = (LedDriver_OneColorFrame) {
 		.Red = red,
 		.Blue = green,
@@ -268,9 +305,24 @@ static void ProcessMillisecondTask(void)
 			{
 				// handle fades
 				--fadeCount;
-				currentFrame.Red += fadeRedIncrement;
-				currentFrame.Green += fadeGreenIncrement;
-				currentFrame.Blue += fadeBlueIncrement;
+				fadeRedCurrent += fadeRedIncrement;
+				fadeGreenCurrent += fadeGreenIncrement;
+				fadeBlueCurrent += fadeBlueIncrement;
+				
+				if(fadeCount == 0)
+				{
+					currentFrame.Red = fadeRedTarget;
+					currentFrame.Green = fadeGreenTarget;
+					currentFrame.Blue = fadeBlueTarget;
+				}
+				else
+				{
+					currentFrame.Red = (uint8_t)fadeRedCurrent;
+					currentFrame.Green = (uint8_t)fadeGreenCurrent;
+					currentFrame.Blue = (uint8_t)fadeBlueCurrent;
+				}
+				
+				
 			}
 			else
 			{

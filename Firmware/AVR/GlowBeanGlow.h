@@ -36,7 +36,7 @@
 			uint8_t ButtonSetOne;
 			uint8_t TempDataHigh;
 			uint8_t TempDataLow;
-			uint8_t Reserved[5];
+			uint8_t Debug[5];
 		};
 	 } ATTR_PACKED GlowBean_OutputReport;
 	 
