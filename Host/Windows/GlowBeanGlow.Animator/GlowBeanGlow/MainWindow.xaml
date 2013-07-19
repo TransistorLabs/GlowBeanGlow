@@ -1,0 +1,91 @@
+﻿<Window x:Class="GlowBeanGlow.MainWindow" Name="AppWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Glow Bean Glow!" Height="540" Width="530">
+	
+    <StackPanel Orientation="Vertical" AllowDrop="False" CanVerticallyScroll="True" IsHitTestVisible="True">
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Vertical" Width="Auto">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Red" Width="50" />
+					<Slider Name="BrightnessRed" Maximum="255" Value="{Binding Path=Red0,Mode=TwoWay}" Interval="1" ValueChanged="BrightnessRed_ValueChanged" MinWidth="200" />
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Green" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Green0,Mode=TwoWay}" ValueChanged="BrightnessGreen_ValueChanged" Name="BrightnessGreen" ></Slider>
+				</StackPanel>
+				<StackPanel  Orientation="Horizontal">
+					<TextBlock Height="23" Text="Blue" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Blue0,Mode=TwoWay}" ValueChanged="BrightnessBlue_ValueChanged" Name="BrightnessBlue" />
+				</StackPanel>
+			</StackPanel>
+			<StackPanel Orientation="Vertical" Width="Auto">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Red" Width="50" />
+					<Slider Name="BrightnessRed2" Maximum="255" Value="{Binding Path=Red1,Mode=TwoWay}" Interval="1" ValueChanged="BrightnessRed2_ValueChanged" MinWidth="200" />
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Green" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Green1,Mode=TwoWay}" ValueChanged="BrightnessGreen2_ValueChanged" Name="BrightnessGree2n" ></Slider>
+				</StackPanel>
+				<StackPanel  Orientation="Horizontal">
+					<TextBlock Height="23" Text="Blue" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Blue1,Mode=TwoWay}" ValueChanged="BrightnessBlue2_ValueChanged" Name="BrightnessBlue2" />
+				</StackPanel>
+			</StackPanel>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" Height="300" Width="505">
+			<StackPanel Orientation="Vertical">
+				<CheckBox Name="Led0Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 0</CheckBox>
+				<CheckBox Name="Led1Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 1</CheckBox>
+				<CheckBox Name="Led2Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 2</CheckBox>
+				<CheckBox Name="Led3Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 3</CheckBox>
+				<CheckBox Name="Led4Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 4</CheckBox>
+				<CheckBox Name="Led5Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 5</CheckBox>
+				<CheckBox Name="Led6Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 6</CheckBox>
+				<CheckBox Name="Led7Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 7</CheckBox>
+				<CheckBox Name="Led8Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 8</CheckBox>
+				<CheckBox Name="Led9Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 9</CheckBox>
+				<CheckBox Name="Led10Active" Checked="LedFlag_Changed" Unchecked="LedFlag_Changed">LED 10</CheckBox>
+			</StackPanel>
+			<StackPanel Orientation="Vertical">
+				<StackPanel Orientation="Horizontal">
+					<Label>Speed:</Label>
+					<Label Name="SpeedLabel">40</Label>
+				</StackPanel>
+				<Slider Height="23" Name="SpeedSlider" Value="40" Width="100" Minimum="0" Maximum="140" Interval="5" TickFrequency="5" SmallChange="5" LargeChange="10" SnapsToDevicePixels="True" IsSnapToTickEnabled="True" ValueChanged="SpeedSlider_ValueChanged" />
+				<Button Name="PlayButton"  Margin="10,2,10,2" Height="25" Click="PlayButton_Click">Play</Button>
+				<Button Name="ClearButton" Click="ClearButton_Click" Margin="10,2,10,2" Height="25">Clear</Button>
+				<Button Name="AddFrameButton"  Margin="10,2,10,2" Height="25" Click="AddFrameButton_Click">Add Frame</Button>
+				<Button Name="DeleteFrameButton"  Margin="10,2,10,2" Height="25" Click="DeleteFrameButton_Click">Remove Frame</Button>
+				<Button Name="SaveToDeviceButton"  Margin="10,2,10,2" Height="25" Click="SaveToDeviceButton_Click">Save To Device</Button>
+				<Button Content="New Interface" Height="32" Name="button1" Width="91" Click="button1_Click" />
+			</StackPanel>
+			<ListBox Name="FrameList" SelectionMode="Single" Width="353" SelectionChanged="FrameList_SelectionChanged" Height="300">
+			</ListBox>
+		</StackPanel>
+		<TextBox Name="CurrentValue" />
+		<StackPanel Orientation="Horizontal" >
+			<StackPanel Orientation="Vertical" Width="Auto">
+				<TextBlock>Static Color:</TextBlock>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Red" Width="50" />
+					<Slider Name="BrightnessRedStatic" Maximum="255" Value="{Binding Path=Red1,Mode=TwoWay}" Interval="1" ValueChanged="BrightnessRedStatic_ValueChanged" MinWidth="200" />
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Green" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Green1,Mode=TwoWay}" ValueChanged="BrightnessGreenStatic_ValueChanged" Name="BrightnessGreenStatic" ></Slider>
+				</StackPanel>
+				<StackPanel  Orientation="Horizontal">
+					<TextBlock Height="23" Text="Blue" Width="50" />
+					<Slider Interval="1" Maximum="255" MinWidth="200" Value="{Binding Path=Blue1,Mode=TwoWay}" ValueChanged="BrightnessBlueStatic_ValueChanged" Name="BrightnessBlueStatic" />
+				</StackPanel>
+			</StackPanel>
+			<CheckBox Name="PreviewStaticColor" Content="Preview Static Color" Unchecked="PreviewStaticColor_Unchecked" Checked="PreviewStaticColor_Checked"></CheckBox>
+
+		</StackPanel>
+		<TextBox Name="Status" AcceptsReturn="True" AcceptsTab="True" Height="112">
+		</TextBox>
+		
+	</StackPanel>
+</Window>

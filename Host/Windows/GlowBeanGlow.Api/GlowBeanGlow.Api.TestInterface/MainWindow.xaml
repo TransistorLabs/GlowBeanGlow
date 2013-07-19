@@ -680,8 +680,8 @@
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Bottom" Width="106.876" Height="127.39" TextAlignment="Center" Foreground="#FF00FF51" FontSize="96" FontFamily="Segoe UI Light" LineHeight="1" Canvas.Left="195" Canvas.Top="24.61" Text="°F"/>
         <TextBlock x:Name="RawByteOutput" TextWrapping="Wrap" FontSize="13.333" Margin="291,9,9,280" RenderTransformOrigin="0.609,4.615" Foreground="White" FontFamily="Consolas">FF FF FF FF FF FF FF FF</TextBlock>
         <TextBlock x:Name="DegreeOutputC" TextWrapping="Wrap" Text="00.0000° C" FontSize="26.667" RenderTransformOrigin="2.145,0.752" HorizontalAlignment="Left" VerticalAlignment="Top" Height="61.47" Margin="56.969,10,0,0" Foreground="#FF0C8100"/>
-        <Rectangle x:Name="Button3" HorizontalAlignment="Left" Height="16" Stroke="Black" VerticalAlignment="Top" Width="16" RenderTransformOrigin="0.458,0.479" Style="{DynamicResource ButtonOffStyle}" Canvas.Left="429" Canvas.Top="30"/>
-        <Rectangle x:Name="Button1" HorizontalAlignment="Left" Height="16" Margin="412,30,0,0" Stroke="Black" VerticalAlignment="Top" Width="16" Style="{DynamicResource ButtonOffStyle}"/>
+        <Rectangle x:Name="Button3" HorizontalAlignment="Left" Height="16" Stroke="Black" VerticalAlignment="Top" Width="16" RenderTransformOrigin="0.458,0.479" Style="{DynamicResource ButtonOffStyle}" Canvas.Left="415" Canvas.Top="32"/>
+        <Rectangle x:Name="Button1" HorizontalAlignment="Left" Height="16" Stroke="Black" VerticalAlignment="Top" Width="16" Style="{DynamicResource ButtonOffStyle}" Canvas.Left="432" Canvas.Top="32"/>
         <TextBlock TextWrapping="Wrap" Text="buttons:" Foreground="#FF7A7A7A" FontFamily="Segoe UI Light" HorizontalAlignment="Right" Width="56" VerticalAlignment="Center" Height="30" Canvas.Left="354.471" Canvas.Top="29.61" FontSize="14" TextAlignment="Right"/>
         <StackPanel Orientation="Vertical" Background="Black" Canvas.Left="39" Canvas.Top="151" Width="262.876" RenderTransformOrigin="0.5,0.5" Height="78.5">
             <Slider Minimum="0" Maximum="255" x:Name="Red" ValueChanged="RedValueChanged" SnapsToDevicePixels="True" Style="{DynamicResource SliderStyle}">
@@ -728,6 +728,8 @@
         <Button Content="Spectrum Rotate Test" Height="21" Canvas.Left="161" Canvas.Top="131" Width="141" Click="FullColorSpectrumTest_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="Write Test Animation" Height="21" Canvas.Left="315" Canvas.Top="196" Width="141" Click="WriteTestAnimation_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="Play" Height="21" Canvas.Left="441" Canvas.Top="196" Width="32" Click="PlayButton_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Left" VerticalAlignment="Center" Name="PlayButton"/>
+        <Button Content="-&gt;" Height="21" Canvas.Left="430" Canvas.Top="83" Width="15" Click="RotateRightButton_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Left" VerticalAlignment="Center" Name="RototeLeftButton"/>
+        <Button Content="&lt;-" Height="21" Canvas.Left="336" Canvas.Top="83" Width="18" Click="RotateLeftButton_Click" Style="{DynamicResource LinkButton}" HorizontalAlignment="Left" x:Name="RototeLeftButton_Copy" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
     </Canvas>
 
 </Window>
