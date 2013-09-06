@@ -5,7 +5,6 @@
  */ 
 
 #include "Storage.h"
-#include "TempDriver.h"
 #include <avr/eeprom.h>
 
 // Define EEPROM locations

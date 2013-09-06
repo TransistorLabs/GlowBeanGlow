@@ -157,10 +157,13 @@ void EVENT_InputDriver_ButtonUp(uint8_t buttonMask)
 	ButtonMaskRaw = buttonMask;
 	ButtonPressedMask &= ~buttonMask;
 	
-	if(INPUTDRIVER_MODESWITCHKEYMASK(buttonMask) && ApplicationMode == ApplicationMode_UsbOffline)
+	if(ApplicationMode == ApplicationMode_UsbOffline)
 	{
-		LedDriver_Clear();
-		OfflineMode_SetNextOfflineMode();
+		if(INPUTDRIVER_MODESWITCHKEYMASK(buttonMask))
+		{
+			LedDriver_Clear();
+			OfflineMode_SetNextOfflineMode();
+		}
 	}
 }
 

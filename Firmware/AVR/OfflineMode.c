@@ -23,6 +23,7 @@ static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData);
 
 static uint16_t animationMode_TotalInstructionCount = 0;
 static uint16_t animationMode_InstructionProgramCounter = 0;
+static int8_t animateMode_ButtonPressFrameIndex = -1;
 
 static uint8_t staticModeRed = 0xff;
 static uint8_t staticModeGreen = 0xff;
@@ -407,10 +408,11 @@ void OfflineMode_ProcessButtonPressUserA(void)
 	{
 		nominalTemp = TempDriver_GetTempF();
 	}
-	
-}
-
-void OfflineMode_ProcessButtonPressUserB(void)
-{
-	
+	else if(OfflineMode == OfflineMode_Animate)
+	{
+		if(animateMode_ButtonPressFrameIndex >= 0)
+		{
+			animationMode_InstructionProgramCounter = animateMode_ButtonPressFrameIndex;
+		}
+	}
 }

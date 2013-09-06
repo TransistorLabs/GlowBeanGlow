@@ -12,11 +12,12 @@
 
 	/* Enums */
 	typedef enum {
-		InstructionType_SetFrame,		//0x00
-		InstructionType_IncrementFrame,	//0x01
-		InstructionType_Condition,		//0x02
-		InstructionType_Jump,			//0x03
-
+		InstructionType_SetFrame,			//0x00
+		InstructionType_IncrementFrame,		//0x01
+		InstructionType_ButtonCondition,	//0x02
+		InstructionType_Jump,				//0x03
+		InstructionType_TempCondition,		//0x04
+		
 		// Assert End Marker - not a valid value
 		InstructionType_End
 	} Instructions_InstructionTypes;
@@ -25,6 +26,12 @@
 		Instructions_ShiftLedLeft,		//0x00
 		Instructions_ShiftLedRight,		//0x01
 	} Instructions_LedShiftOptions;
+	
+	typedef enum {
+		Instructions_TempCondition_LessThan,		//0x00
+		Instructions_TempCondition_EqualTo,			//0x01
+		Instructions_TempCondition_GreaterThan,		//0x02
+	} Instructions_TempCondition_CompareTypeOptions;
 
 /************************************************************************/
 /* Data Structures                                                      */
@@ -42,7 +49,7 @@
 	} Instructions_SetFrame;
 
 	// Increment Frame Instruction (instruction type: 0x01)
-	// Ri Gi Bi Cd Cc Ld Lc Lst IT
+	// REDi GRNi BLUi CLR_dly CLR_cnt LSHFT_dly LSHFT_cnt LSHFT_type INST_type
 	typedef struct
 	{
 		// Color increment data
@@ -72,16 +79,36 @@
 	typedef struct
 	{
 		uint16_t TargetIndex;
-		uint8_t Reserved[5];	// TODO Add conditions here?
+		uint8_t Reserved[5];
 		uint8_t InstructionType : 4,
 				ReservedBits	: 4;
 	} Instructions_JumpTo;
+	
+	typedef struct
+	{
+		uint16_t TargetIndex;
+		uint16_t Reserved[5];
+		uint8_t InstructionType : 4,
+				ReservedBits	: 4;
+	} Instructions_ButtonCondition;
+	
+	typedef struct
+	{
+		uint16_t TargetIndex;
+		uint8_t CompareTempC;
+		uint16_t Reserved[4];
+		uint8_t InstructionType : 4,
+				CompareType	: 4;
+	} Instructions_TempCondition;
 
 	typedef union
 	{
 		Instructions_SetFrame SetFrame;
 		Instructions_IncrementFrame IncrementFrame;
 		Instructions_JumpTo JumpTo;
+		Instructions_ButtonCondition ButtonCondition;
+		Instructions_TempCondition TempCondition;
+		
 		struct
 		{
 			// This anonymous struct is used to 
