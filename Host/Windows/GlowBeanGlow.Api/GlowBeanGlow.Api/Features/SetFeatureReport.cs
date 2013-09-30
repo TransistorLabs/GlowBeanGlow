@@ -2,7 +2,7 @@
 
 namespace GlowBeanGlow.Api.Features
 {
-    internal class SetFeatureReport : IReportData
+    public class SetFeatureReport : IReportData
     {
         public SetFeatureReport()
         {

@@ -51,6 +51,7 @@
     <Compile Include="Features\SetFeatureCommands.cs" />
     <Compile Include="FullColorLiveFrame.cs" />
     <Compile Include="Instructions\JumpToInstruction.cs" />
+    <Compile Include="Instructions\ButtonEventInstruction.cs" />
     <Compile Include="Interfaces\IReportData.cs" />
     <Compile Include="Interfaces\IInstruction.cs" />
     <Compile Include="Instructions\IncrementFrameInstruction.cs" />

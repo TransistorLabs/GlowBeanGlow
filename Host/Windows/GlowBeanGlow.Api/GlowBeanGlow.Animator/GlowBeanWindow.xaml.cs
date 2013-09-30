@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GlowBeanGlow.Api;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace GlowBeanGlow
@@ -17,11 +18,14 @@ namespace GlowBeanGlow
 	{
 		protected WindowFrame CurrentFrame { get; set; }
 
+	    private UsbDriver _driver;
 		//protected AnimatorView ViewModel = new AnimatorView();
 		public GlowBeanWindow()
 		{
 			InitializeComponent();
-			CurrentFrame = new WindowFrame();
+		    _driver = new UsbDriver();
+
+            CurrentFrame = new WindowFrame();
 			DataContext = CurrentFrame;
 		}
 
