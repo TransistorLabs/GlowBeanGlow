@@ -262,6 +262,7 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 	else
 	{
 		bool instructionFinished = true;
+		float currentTemp = TempDriver_GetTempC();
 		
 		// Perform mid-instruction animation processing (not relevant for SetFrame)
 		switch(currentInstruction.InstructionType)
@@ -374,10 +375,28 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 					//TODO:ms hold should be 0ms or 1ms?
 					frameData->MillisecondsHold = 0x0001;
 					break;
+					
+				case InstructionType_ButtonCondition:
+					animateMode_ButtonPressFrameIndex = currentInstruction.ButtonCondition.TargetIndex;
+					frameData->MillisecondsHold = 0x0000;
+					break;
+					
+				case InstructionType_TempCondition:
+					switch(currentInstruction.TempCondition.CompareType)
+					{
+						///TODO: FILL THIS STUFF OUT
+						case Instructions_TempCondition_LessThan:
+							break;
+						case Instructions_TempCondition_GreaterThan:
+							break;
+						case Instructions_TempCondition_EqualTo:
+							break;
+					}
+					break;
 				
 				case InstructionType_Jump:
 					animationMode_InstructionProgramCounter = currentInstruction.JumpTo.TargetIndex - 1;
-					frameData->MillisecondsHold = 0x0000;					
+					frameData->MillisecondsHold = 0x0000;
 					break;
 				default:
 					break;
@@ -410,7 +429,7 @@ void OfflineMode_ProcessButtonPressUserA(void)
 	}
 	else if(OfflineMode == OfflineMode_Animate)
 	{
-		if(animateMode_ButtonPressFrameIndex >= 0)
+		if(animateMode_ButtonPressFrameIndex >= 0 )//&& animateMode_ButtonPressFrameIndex < animationMode_TotalInstructionCount)
 		{
 			animationMode_InstructionProgramCounter = animateMode_ButtonPressFrameIndex;
 		}
