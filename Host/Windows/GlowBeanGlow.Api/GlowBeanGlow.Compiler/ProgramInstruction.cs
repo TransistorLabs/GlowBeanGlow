@@ -10,6 +10,6 @@ namespace GlowBeanGlow.Compiler
     public class ProgramInstruction
     {
         public IInstruction Instruction { get; set; }
-        public string Label { get; set; }
+        public string GotoLabel { get; set; }
     }
 }

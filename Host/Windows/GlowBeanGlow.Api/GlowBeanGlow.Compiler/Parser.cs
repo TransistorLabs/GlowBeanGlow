@@ -16,11 +16,15 @@ namespace GlowBeanGlow.Compiler
         private readonly IList<ProgramInstruction> _instructions;
         private int _tokenIndex = 0;
         private int _currentInstructionIndex = 9;
-        private int _currentLoopInstructionIndex = 0;
-        private string _currentLabel = "";
+        private Stack<string> _loopScopeLabels;
+        //private string _currentLabel = "";
+
+        private Dictionary<string, int> _labels;
 
         public Parser(IList<Token> tokens)
         {
+            _loopScopeLabels = new Stack<string>();
+            _labels = new Dictionary<string, int>();
             _tokens = tokens;
             _instructions = new List<ProgramInstruction>();
         }
@@ -55,15 +59,13 @@ namespace GlowBeanGlow.Compiler
                 var jumpTo = instruction.Instruction as JumpToInstruction; 
                 if (jumpTo != null)
                 {
-                    jumpTo.JumpTargetIndex =
-                        (ushort)_instructions.IndexOf(_instructions.FirstOrDefault(i => i.Label == instruction.Label));
+                    jumpTo.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
                 }
 
                 var buttonEvent = instruction.Instruction as ButtonEventInstruction;
                 if (buttonEvent != null)
                 {
-                    buttonEvent.JumpTargetIndex =
-                        (ushort)_instructions.IndexOf(_instructions.FirstOrDefault(i => i.Label == instruction.Label));
+                    buttonEvent.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
                 }
             }
         }
@@ -74,12 +76,13 @@ namespace GlowBeanGlow.Compiler
             var token = GetNextToken();
             AssertValid(token, "expected: label" + _tokenIndex, x => x.Type == TokenType.Keyword);
             
-            if (!string.IsNullOrWhiteSpace(_currentLabel))
+            if (_labels.ContainsKey(token.RawValue))
             {
-                LogError(token, "a label is already defined for this location");
+                LogError(token, "duplicate label found");
             }
 
-            _currentLabel = token.RawValue;
+            // Add label and program index
+            _labels.Add(token.RawValue, _instructions.Count);
         }
         
         private bool ProcessNextToken()
@@ -97,7 +100,18 @@ namespace GlowBeanGlow.Compiler
                     break;
 
                 case TokenType.ScopeDown:
-                    return false;
+                    if (_loopScopeLabels.Count > 0)
+                    {
+                        // Pop off the last label in the stack and make a Goto statement for it
+                        var label = _loopScopeLabels.Pop();
+                        var jumpInstruction = GetNewProgramInstruction(new JumpToInstruction());
+                        jumpInstruction.GotoLabel = label;
+                        _instructions.Add(jumpInstruction);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                     break;
             }
             return true;
@@ -112,7 +126,9 @@ namespace GlowBeanGlow.Compiler
                     var scopeUp = GetNextToken();
                     AssertValid(scopeUp, "Expected: {", x => x.Type == TokenType.ScopeUp);
                     //save index for scope exit
-                    _currentLoopInstructionIndex = _currentInstructionIndex;
+                    var tempLabel = Guid.NewGuid().ToString();
+                    _labels.Add(tempLabel, _instructions.Count);
+                    _loopScopeLabels.Push(tempLabel);
                     break;
 
                 case "set":
@@ -140,11 +156,6 @@ namespace GlowBeanGlow.Compiler
         private ProgramInstruction GetNewProgramInstruction(IInstruction instruction)
         {
             var p = new ProgramInstruction {Instruction = instruction};
-            if (!string.IsNullOrWhiteSpace(_currentLabel))
-            {
-                p.Label = _currentLabel;
-                _currentLabel = "";
-            }
             return p;
         }
 
@@ -263,7 +274,7 @@ namespace GlowBeanGlow.Compiler
                         x => x.Type == TokenType.Keyword);
             if (nextToken.Type == TokenType.Keyword)
             {
-                jumpInstruction.Label = nextToken.RawValue;
+                jumpInstruction.GotoLabel = nextToken.RawValue;
             }
 
             nextToken = GetNextToken();
@@ -277,6 +288,8 @@ namespace GlowBeanGlow.Compiler
             _instructions.Add(jumpInstruction);
         }
 
+        
+
         private void ProcessButtonEventFunction()
         {
             var buttonEventInstruction = new ProgramInstruction { Instruction = new ButtonEventInstruction() };
@@ -289,7 +302,7 @@ namespace GlowBeanGlow.Compiler
                         x => x.Type == TokenType.Keyword);
             if (nextToken.Type == TokenType.Keyword)
             {
-                buttonEventInstruction.Label = nextToken.RawValue;
+                buttonEventInstruction.GotoLabel = nextToken.RawValue;
             }
 
             nextToken = GetNextToken();

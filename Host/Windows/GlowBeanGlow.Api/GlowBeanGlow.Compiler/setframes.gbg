@@ -2,17 +2,44 @@
 
 loop {
 
-	@start				// optional; if included, must be alphanumeric with no punctuation or whitespace (aside from trim())
+	@start
 	set (
-		color: #eeff99,				// expected to be #000 or #000000 format, or standard* named colors (case-insensitive)
-		duration: 250,				// duration of frame in milliseconds (0-65535; may be validated to a divisor of 2 or 5; TBD)
-		ledsOn: [0,1,2,4,8,9,10,11]	// an array of leds to turn on; all others will be off (valid values are 0-11).
-									// may offer shortcuts for "none" and "all", possibly even "poles", and "compass"
+		color: #eeff99,
+		duration: 250,
+		ledsOn: [0,1,2,4,8,9,10,11]
 	);
 	set (
-		color: #0099ff,				// expected to be #000 or #000000 format, or standard* named colors (case-insensitive)
-		duration: 250,				// duration of frame in milliseconds (0-65535; may be validated to a divisor of 2 or 5; TBD)
-		ledsOn: [3,5,6,7]	// an array of leds to turn on; all others will be off (valid values are 0-11).
-									// may offer shortcuts for "none" and "all", possibly even "poles", and "compass"
+		color: #0099ff,
+		duration: 250,
+		ledsOn: [3,5,6,7]
 	);
+
+	onUserButtonPress(start);
+
+	loop {
+
+		set (
+		color: #ff9900,
+		duration: 100,
+		ledsOn: [0]
+		);
+
+		set (
+		color: #ff99ff,
+		duration: 100,
+		ledsOn: [3]
+		);
+
+		set (
+		color: #00ff00,
+		duration: 100,
+		ledsOn: [6]
+		);
+
+		set (
+		color: #0000ff,
+		duration: 100,
+		ledsOn: [9]
+		);
+	}
 }

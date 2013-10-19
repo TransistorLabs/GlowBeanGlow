@@ -13,16 +13,17 @@ namespace GlowBeanGlow.Compiler
         public static string Generate(IEnumerable<IInstruction> instructions)
         {
             /* 
-             sf 00  03 FF 02 01 00 50 00 00 
+             sf 00  01 00 01 00 00 00 00 00 
              WR 00  FF FF FF 01 00 10 00 00 
-             sf 00  03 10 03 00 04 40 00 00 
+             sf 00  01 00 02 00 00 00 00 00 
+
              */
 
             var startCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
             startCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStart;
 
             var stopCommand = new SetFeatureReport { Command = SetFeatureCommands.ChangeFeatureMode };
-            stopCommand.CommandData[0] = (byte)FeatureModeOptions.RenderLiveFrameData;
+            stopCommand.CommandData[0] = (byte)FeatureModeOptions.StoreProgramStop;
                 
             var sb = new StringBuilder();
             sb.AppendLine(GenerateFromSetFeatureReport(startCommand));
