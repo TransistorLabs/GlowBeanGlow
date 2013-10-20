@@ -2,44 +2,62 @@
 
 loop {
 
-	@start
-	set (
-		color: #eeff99,
-		duration: 250,
-		ledsOn: [0,1,2,4,8,9,10,11]
-	);
-	set (
-		color: #0099ff,
-		duration: 250,
-		ledsOn: [3,5,6,7]
-	);
+    @start
+    set (
+        color: #eeff99,
+        duration: 250,
+        ledsOn: [0,1,2,4,8,9,10,11]
+    );
+    set (
+        color: #0099ff,
+        duration: 250,
+        ledsOn: [3,5,6,7]
+    );
 
-	onUserButtonPress(start);
+    onUserButtonPress(start);
+    
+    @rotate
+    loop {
 
-	loop {
+        set (
+        color: #ff9900,
+        duration: 100,
+        ledsOn: [0]
+        );
 
-		set (
-		color: #ff9900,
-		duration: 100,
-		ledsOn: [0]
-		);
+        set (
+        color: #ff99ff,
+        duration: 100,
+        ledsOn: [3]
+        );
 
-		set (
-		color: #ff99ff,
-		duration: 100,
-		ledsOn: [3]
-		);
+        set (
+        color: #00ff00,
+        duration: 100,
+        ledsOn: [6]
+        );
 
-		set (
-		color: #00ff00,
-		duration: 100,
-		ledsOn: [6]
-		);
+        set (
+        color: #0000ff,
+        duration: 100,
+        ledsOn: [9]
+        );
 
-		set (
-		color: #0000ff,
-		duration: 100,
-		ledsOn: [9]
-		);
-	}
+        ifTemp (
+            between: 70,
+            and: 80,
+            goto: redblink
+        ); 
+    }
+
+    @redblink
+    loop {
+        set ( color: #ff0000, duration: 100, ledsOn: [0] );
+        set ( color: #ff0000, duration: 100, ledsOn: [] );
+        ifTemp (
+            between: 0,
+            and: 69,
+            goto: rotate
+        ); 
+    }
 }

@@ -11,6 +11,8 @@
 #include "TransistorLabs/common.h"
 #include <stdlib.h>
 
+#define NOFRAMESET	0xFFFF
+
 static OfflineMode_ModeOptions OfflineMode = OfflineMode_Static;
 static volatile Instructions_Instruction currentInstruction;
 
@@ -23,7 +25,7 @@ static void GetNextFrame_OffMode(LedDriver_OneColorFrame * const frameData);
 
 static uint16_t animationMode_TotalInstructionCount = 0;
 static uint16_t animationMode_InstructionProgramCounter = 0;
-static int8_t animateMode_ButtonPressFrameIndex = -1;
+static uint16_t animateMode_ButtonPressFrameIndex = NOFRAMESET;
 
 static uint8_t staticModeRed = 0xff;
 static uint8_t staticModeGreen = 0xff;
@@ -262,7 +264,7 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 	else
 	{
 		bool instructionFinished = true;
-		float currentTemp = TempDriver_GetTempC();
+		uint16_t currentTemp;// = TempDriver_GetTempC();
 		
 		// Perform mid-instruction animation processing (not relevant for SetFrame)
 		switch(currentInstruction.InstructionType)
@@ -382,15 +384,14 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 					break;
 					
 				case InstructionType_TempCondition:
-					switch(currentInstruction.TempCondition.CompareType)
 					{
-						///TODO: FILL THIS STUFF OUT
-						case Instructions_TempCondition_LessThan:
-							break;
-						case Instructions_TempCondition_GreaterThan:
-							break;
-						case Instructions_TempCondition_EqualTo:
-							break;
+						currentTemp = (uint16_t)TempDriver_GetTempF();
+						if(currentTemp >= currentInstruction.TempCondition.LowTempF 
+							&& currentTemp <= currentInstruction.TempCondition.HighTempF)
+						{
+							animationMode_InstructionProgramCounter = currentInstruction.TempCondition.TargetIndex - 1;
+						}
+						frameData->MillisecondsHold = 0x0000;
 					}
 					break;
 				
@@ -429,7 +430,7 @@ void OfflineMode_ProcessButtonPressUserA(void)
 	}
 	else if(OfflineMode == OfflineMode_Animate)
 	{
-		if(animateMode_ButtonPressFrameIndex >= 0 )//&& animateMode_ButtonPressFrameIndex < animationMode_TotalInstructionCount)
+		if(animateMode_ButtonPressFrameIndex != NOFRAMESET)
 		{
 			animationMode_InstructionProgramCounter = animateMode_ButtonPressFrameIndex;
 		}

@@ -67,6 +67,12 @@ namespace GlowBeanGlow.Compiler
                 {
                     buttonEvent.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
                 }
+
+                var tempCondition = instruction.Instruction as TempConditionInstruction;
+                if (tempCondition != null)
+                {
+                    tempCondition.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
+                }
             }
         }
 
@@ -146,7 +152,10 @@ namespace GlowBeanGlow.Compiler
                 case "onUserButtonPress":
                     ProcessButtonEventFunction();
                     break;
-
+                
+                case "ifTemp":
+                    ProcessTempConditionFunction();
+                    break;
                 default:
                     LogError(token, "unknown token");
                     break;
@@ -199,6 +208,55 @@ namespace GlowBeanGlow.Compiler
 
 
             _instructions.Add(GetNewProgramInstruction(setInstruction));
+        }
+
+        //ifTemp (
+        //    between: 71,
+        //    and: 80,
+        //    goto: clockwiseShift
+        //); 
+
+        private void ProcessTempConditionFunction()
+        {
+            var tempProgramInstruction = GetNewProgramInstruction(new TempConditionInstruction());
+
+            var nextToken = GetNextToken();
+            AssertValid(nextToken, "Expected: (", x => x.Type == TokenType.StartFunction);
+            while (nextToken.Type != TokenType.TerminateStatement)
+            {
+                nextToken = GetNextToken();
+                AssertValid(nextToken, "Expected: parameter keyword or ) or ;",
+                            x =>
+                            x.Type == TokenType.Keyword || x.Type == TokenType.EndFunction || x.Type == TokenType.TerminateStatement);
+                if (nextToken.Type == TokenType.Keyword)
+                {
+                    switch (nextToken.RawValue)
+                    {
+                        case "between":
+                        case "low":
+                            ((TempConditionInstruction)tempProgramInstruction.Instruction).LowTempF = (ushort)ProcessNumber();
+                            break;
+
+                        case "and":
+                        case "high":
+                            ((TempConditionInstruction)tempProgramInstruction.Instruction).HighTempF = (ushort)ProcessNumber();
+                            break;
+
+                        case "goto":
+                            tempProgramInstruction.GotoLabel = ProcessLabelDefinition(true);
+                            break;
+                        default:
+                            LogError(nextToken, "unknown parameter: " + nextToken.RawValue);
+                            break;
+                    }
+
+                    nextToken = GetNextToken();
+                    AssertValid(nextToken, "expected: , or )",
+                                x => x.Type == TokenType.EndParameterValue || x.Type == TokenType.EndFunction);
+                }
+            }
+
+            _instructions.Add(tempProgramInstruction);
         }
 
         private void ProcessIncrementFunction()
@@ -268,14 +326,8 @@ namespace GlowBeanGlow.Compiler
             var jumpInstruction = GetNewProgramInstruction(new JumpToInstruction());
             var nextToken = GetNextToken();
             AssertValid(nextToken, "Expected: (", x => x.Type == TokenType.StartFunction);
-            
-            nextToken = GetNextToken();
-            AssertValid(nextToken, "Expected: label definition",
-                        x => x.Type == TokenType.Keyword);
-            if (nextToken.Type == TokenType.Keyword)
-            {
-                jumpInstruction.GotoLabel = nextToken.RawValue;
-            }
+
+            jumpInstruction.GotoLabel = ProcessLabelDefinition(false);
 
             nextToken = GetNextToken();
             AssertValid(nextToken, "expected: )",
@@ -288,22 +340,14 @@ namespace GlowBeanGlow.Compiler
             _instructions.Add(jumpInstruction);
         }
 
-        
-
         private void ProcessButtonEventFunction()
         {
             var buttonEventInstruction = new ProgramInstruction { Instruction = new ButtonEventInstruction() };
 
             var nextToken = GetNextToken();
             AssertValid(nextToken, "Expected: (", x => x.Type == TokenType.StartFunction);
-            
-            nextToken = GetNextToken();
-            AssertValid(nextToken, "Expected: label definition",
-                        x => x.Type == TokenType.Keyword);
-            if (nextToken.Type == TokenType.Keyword)
-            {
-                buttonEventInstruction.GotoLabel = nextToken.RawValue;
-            }
+
+            buttonEventInstruction.GotoLabel = ProcessLabelDefinition(false);
 
             nextToken = GetNextToken();
             AssertValid(nextToken, "expected: )",
@@ -362,6 +406,21 @@ namespace GlowBeanGlow.Compiler
             return keyword.RawValue == "CLOCKWISE" 
                 ? LedShiftOptions.ShiftLedRight 
                 : LedShiftOptions.ShiftLedLeft;
+        }
+
+        private string ProcessLabelDefinition(bool expectParamSeparatorToken)
+        {
+            if (expectParamSeparatorToken)
+            {
+                var endParamToken = GetNextToken();
+                AssertValid(endParamToken, "Expected: colon (:)",
+                            x => x.Type == TokenType.EndParameterName);
+            }
+
+            var nextToken = GetNextToken();
+            AssertValid(nextToken, "Expected: label definition",
+                        x => x.Type == TokenType.Keyword);
+            return nextToken.RawValue;
         }
 
         private LedState ProcessLedStateArray()

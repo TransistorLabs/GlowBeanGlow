@@ -33,24 +33,25 @@ loop {
 
     onUserButtonPress(clockwiseShift);		// registers the instruction index to be loaded when the user button is pressed
 
-//	TODO: add implicit, nested-scope loop capabilities
-//	loop {
 
-//	TODO: add conditional support and temp function support
-//		if(getTempF() > 72) {
-//			goto(red);
-//		}
-//	} 
+	loop {
 
-    @red
-    set (
-        color: #ff0000,
-        duration: 1000,
-        ledsOn: [0,2,4,9]
-    );
+        ifTemp (
+            between: 71,
+            and: 80,
+            goto: clockwiseShift
+        ); 
 
-    goto(clockwiseShift);
-}
+        
+		@red
+		set (
+			color: #ff0000,
+			duration: 1000,
+			ledsOn: [0,2,4,9]
+		);
+
+		goto(clockwiseShift);
+	}
 
 /*
     TODO:
