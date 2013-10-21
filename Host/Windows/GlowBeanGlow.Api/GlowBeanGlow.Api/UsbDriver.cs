@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using GlowBeanGlow.Api.Display;
 using GlowBeanGlow.Api.Features;
-using GlowBeanGlow.Api.Instructions;
 using GlowBeanGlow.Api.Interfaces;
 using HidLibrary;
 
@@ -24,6 +21,7 @@ namespace GlowBeanGlow.Api
         public Action OnUser1ButtonReleased;
         public Action OnUser2ButtonPressed;
         public Action OnUser2ButtonReleased;
+        public Action<bool> OnProgramWriteComplete;
 
         private bool _attached;
         private bool _connectedToDriver;
@@ -141,24 +139,22 @@ namespace GlowBeanGlow.Api
             }
 
             var topInstruction = stack.Pop();
-            Thread.Sleep(5);
             _device.Write(topInstruction.GetReportData(),
                           (success) =>
                               {
                                   if (!success)
                                   {
-                                      // 
+                                      
                                       var stopSuccess = SendProgramStopCommand();
 
                                       if (!stopSuccess)
                                       {
                                           throw new ApplicationException("Program Write failed. Device in unknown state.");
                                       }
-
-                                      //throw new ApplicationException("Program Write failed.");
-                                      
                                   }
+                                  Thread.Sleep(50); // TODO: this delay thing is pretty lame; look into better ways to ensure a write gets completed
                                   WriteProgramData(stack);
+                                  
                               });
         }
 
@@ -168,6 +164,12 @@ namespace GlowBeanGlow.Api
             stopCommand.CommandData[0] = (byte) FeatureModeOptions.StoreProgramStop;
             var result =  _device.WriteFeatureData(stopCommand.GetReportData());
             _isProgramming = false;
+
+            if (OnProgramWriteComplete != null)
+            {
+                OnProgramWriteComplete(result);
+            }
+
             return result;
         }
 
