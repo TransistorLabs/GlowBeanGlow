@@ -1,0 +1,27 @@
+
+
+
+
+
+
+
+
+loop {
+
+    @start
+    set (
+        color: #00ff00,
+        duration: 5,
+        ledsOn: [1,2,3,5,6,7,9,10,11]
+    );
+    set (
+        color: #0000ff,
+        duration: 5,
+        ledsOn:[0,4,8]
+    );
+	set (
+        color: #ff0000,
+        duration: 5,
+        ledsOn: [0,3,6,9]
+    );
+}

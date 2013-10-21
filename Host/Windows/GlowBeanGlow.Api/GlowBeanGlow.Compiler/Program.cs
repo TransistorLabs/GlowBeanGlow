@@ -14,7 +14,7 @@ namespace GlowBeanGlow.Compiler
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("\nPlease supply a file path (.gbg) to compile as an argument.");
+                Console.WriteLine("\nPlease supply a path to a file (.gbg) to compile.");
                 return;
             }
 
@@ -24,26 +24,29 @@ namespace GlowBeanGlow.Compiler
             try
             {
                 var fileContents = File.ReadAllText(args[0]);
-                var scanner = new Scanner(fileContents);
-                var tokens = scanner.GetTokens();
+                fileContents = Preprocessor.Process(fileContents);
 
+                File.WriteAllText(args[0] + ".preprocessed", fileContents);
+                var lexer = new Lexer(fileContents);
+                var tokens = lexer.GetTokens();
+
+                // output tokens file
                 var tokenOutput = string.Join("\n", tokens.Select(
-                    x => 
+                    x =>
                         x.RawValue
                         + "\t\t\t"
-                        + Enum.GetName(typeof(TokenType), x.Type) 
-                        + "\t\t\t" 
+                        + Enum.GetName(typeof(TokenType), x.Type)
+                        + "\t\t\t"
                         + x.LineNumber
                         + ","
                         + x.CharacterNumber));
-                
                 File.WriteAllText(args[0] + ".tokens", tokenOutput);
 
                 var parser = new Parser(tokens);
                 var instructions = parser.Parse();
-
                 var hidCode = HidCodeGenerator.Generate(instructions);
 
+                // output hidcode (SimpleHidWrite syntax)
                 File.WriteAllText(args[0] + ".hidcode", hidCode);
 
                 Console.WriteLine("\nDone.");

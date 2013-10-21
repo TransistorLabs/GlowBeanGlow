@@ -60,10 +60,11 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="HidCodeGenerator.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="Preprocessor.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramInstruction.cs" />
+    <Compile Include="InstructionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scanner.cs" />
+    <Compile Include="Lexer.cs" />
     <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup>

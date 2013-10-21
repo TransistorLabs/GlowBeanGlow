@@ -4,20 +4,19 @@ using System.Text.RegularExpressions;
 
 namespace GlowBeanGlow.Compiler
 {
-    public class Scanner
+    public class Lexer
     {
-        private const string IdentifierTokenMatch = @"\w";
+        private const string IdentifierTokenMatch = @"[-\w]";
         private readonly List<Token> _tokens = new List<Token>();
 
         private string _input = "";
-        public Scanner(string input)
+        public Lexer(string input)
         {
             _input = input;
         }
 
         public List<Token> GetTokens()
         {
-            _input = StripComments(_input);
             var index = 0;
             var currentLine = 1;
             var currentCharacter = 1;
@@ -100,7 +99,7 @@ namespace GlowBeanGlow.Compiler
                                 break;
 
                             default:
-                                throw new ApplicationException("Invalid character: " + character);
+                                throw new ApplicationException("Invalid character (Line " + currentLine + "): " + character);
                         }
 
                         _tokens.Add(charToken);
@@ -116,19 +115,6 @@ namespace GlowBeanGlow.Compiler
             }
 
             return _tokens;
-        }
-
-        private static string StripComments(string input)
-        {
-            input = Regex.Replace(input, "//.*$", "", RegexOptions.Multiline);
-            input = Regex.Replace(input, @"/\*(.|[\r\n])*?\*/", "", RegexOptions.Multiline);
-            return input;
-        }
-
-        private static string StripWhitespace(string input)
-        {
-            input = Regex.Replace(input, @"\s*", "");
-            return input;
         }
     }
 }

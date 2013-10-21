@@ -1,0 +1,196 @@
+﻿#define RED #ff0000
+#define ORANGE #ff9A00
+#define GREEN #00ff00
+#define BLUE #0000ff
+#define ALLON [0,1,2,3,4,5,6,7,8,9,10,11]
+#define ALLOFF []
+#define COMPASS_POINTS [0,3,6,9]
+#define NON_COMPASS_POINTS [1,2,4,5,7,8,10,11]
+#define	ROW1	[0]
+#define	ROW2	[1,11]
+#define	ROW3	[2,10]
+#define	ROW4	[3,9]
+#define	ROW5	[4,8]
+#define	ROW6	[5,7]
+#define	ROW7	[6]
+
+loop {
+
+    @start
+    set (
+        color: #eeff99,
+        duration: 250,
+        ledsOn: COMPASS_POINTS
+    );
+    set (
+        color: #0099ff,
+        duration: 250,
+        ledsOn:NON_COMPASS_POINTS
+    );
+
+    onUserButtonPress(start);
+    
+    @checktemp
+    loop {
+        ifTemp (
+            between: 0,
+            and: 70,
+            goto: 70
+        );
+
+        ifTemp (
+            between: 71,
+            and: 71,
+            goto: 71
+        );
+        
+        ifTemp (
+            between: 72,
+            and: 72,
+            goto: 72
+        );
+
+        ifTemp (
+            between: 73,
+            and: 73,
+            goto: 73
+        );
+
+        ifTemp (
+            between: 74,
+            and: 74,
+            goto: 74
+        );
+
+        ifTemp (
+            between: 75,
+            and: 75,
+            goto: 75
+        );
+
+        ifTemp (
+            between: 76,
+            and: 76,
+            goto: 76
+        );
+
+         ifTemp (
+            between: 77,
+            and: 77,
+            goto: 77
+        );
+
+         ifTemp (
+            between: 78,
+            and: 78,
+            goto: 78
+        );
+
+         ifTemp (
+            between: 79,
+            and: 79,
+            goto: 79
+        );
+
+         ifTemp (
+            between: 80,
+            and: 100,
+            goto: 80
+        );
+    }
+
+    @70
+    set (
+        color: BLUE,
+        duration: 250,
+        ledsOn: [0]
+    );
+    goto(checktemp);
+
+	@71
+    set (
+        color: BLUE,
+        duration: 250,
+        ledsOn: [0,1]
+    );
+    goto(checktemp);
+
+	@72
+    set (
+        color: GREEN,
+        duration: 250,
+        ledsOn: [0,1,2]
+    );
+    goto(checktemp);
+
+	@73
+    set (
+        color: GREEN,
+        duration: 250,
+        ledsOn: [0,1,2,3]
+    );
+    goto(checktemp);
+
+	@74
+    set (
+        color: GREEN,
+        duration: 250,
+        ledsOn: [0,1,2,3,4]
+    );
+    goto(checktemp);
+
+	@75
+    set (
+        color: ORANGE,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5]
+    );
+    goto(checktemp);
+
+	@76
+    set (
+        color: ORANGE,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5,6]
+    );
+    goto(checktemp);
+
+	@77
+    set (
+        color: ORANGE,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5,6,7]
+    );
+    goto(checktemp);
+
+	@78
+    set (
+        color: RED,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5,6,7,8]
+    );
+    goto(checktemp);
+
+    @79
+    set (
+        color: RED,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5,6,7,8,9]
+    );
+    goto(checktemp);
+
+	@80
+    set (
+        color: RED,
+        duration: 250,
+        ledsOn: ALLON
+    );
+
+	set (
+        color: RED,
+        duration: 250,
+        ledsOn: ALLOFF
+    );
+    goto(checktemp);
+   
+}

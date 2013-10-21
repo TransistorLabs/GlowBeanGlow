@@ -1,0 +1,27 @@
+﻿#define RED #ff0000
+#define GREEN #00ff00
+#define BLUE #0000ff
+#define COMPASS_POINTS [0,3,6,9]
+#define NON_COMPASS_POINTS [1,2,4,5,7,8,10,11]
+#define BIOHAZARD [1,2,3,5,6,7,9,10,11]
+#define NON_BIOHAZARD [0,4,8]
+
+loop {
+
+    @start
+    set (
+        color: GREEN,
+        duration: 5,
+        ledsOn: BIOHAZARD
+    );
+    set (
+        color: BLUE,
+        duration: 5,
+        ledsOn:NON_BIOHAZARD
+    );
+	/*set (
+        color: RED,
+        duration: 5,
+        ledsOn: COMPASS_POINTS
+    );*/
+}

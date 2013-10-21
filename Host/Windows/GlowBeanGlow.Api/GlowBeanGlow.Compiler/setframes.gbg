@@ -1,4 +1,7 @@
-﻿
+﻿#define ALLON [0,1,2,3,4,5,6,7,8,9,10,11]
+#define ALLOFF []
+#define COMPASS_POINTS [0,3,6,9]
+#define NON_COMPASS_POINTS [1,2,4,5,7,8,10,11]
 
 loop {
 
@@ -6,12 +9,12 @@ loop {
     set (
         color: #eeff99,
         duration: 250,
-        ledsOn: [0,1,2,4,8,9,10,11]
+        ledsOn: COMPASS_POINTS
     );
     set (
         color: #0099ff,
         duration: 250,
-        ledsOn: [3,5,6,7]
+        ledsOn:NON_COMPASS_POINTS
     );
 
     onUserButtonPress(start);
@@ -20,9 +23,9 @@ loop {
     loop {
 
         set (
-        color: #ff9900,
-        duration: 100,
-        ledsOn: [0]
+        color:		#ff9900,
+        duration:	100,
+        ledsOn:		[0]
         );
 
         set (
@@ -42,22 +45,5 @@ loop {
         duration: 100,
         ledsOn: [9]
         );
-
-        ifTemp (
-            between: 70,
-            and: 80,
-            goto: redblink
-        ); 
-    }
-
-    @redblink
-    loop {
-        set ( color: #ff0000, duration: 100, ledsOn: [0] );
-        set ( color: #ff0000, duration: 100, ledsOn: [] );
-        ifTemp (
-            between: 0,
-            and: 69,
-            goto: rotate
-        ); 
     }
 }

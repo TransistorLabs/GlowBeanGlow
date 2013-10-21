@@ -1,0 +1,198 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+loop {
+
+    @start
+    set (
+        color: #eeff99,
+        duration: 250,
+        ledsOn: [0,3,6,9]
+    );
+    set (
+        color: #0099ff,
+        duration: 250,
+        ledsOn:[1,2,4,5,7,8,10,11]
+    );
+
+    onUserButtonPress(start);
+    
+    @checktemp
+    loop {
+        ifTemp (
+            between: 0,
+            and: 70,
+            goto: 70
+        );
+
+        ifTemp (
+            between: 71,
+            and: 71,
+            goto: 71
+        );
+        
+        ifTemp (
+            between: 72,
+            and: 72,
+            goto: 72
+        );
+
+        ifTemp (
+            between: 73,
+            and: 73,
+            goto: 73
+        );
+
+        ifTemp (
+            between: 74,
+            and: 74,
+            goto: 74
+        );
+
+        ifTemp (
+            between: 75,
+            and: 75,
+            goto: 75
+        );
+
+        ifTemp (
+            between: 76,
+            and: 76,
+            goto: 76
+        );
+
+         ifTemp (
+            between: 77,
+            and: 77,
+            goto: 77
+        );
+
+         ifTemp (
+            between: 78,
+            and: 78,
+            goto: 78
+        );
+
+         ifTemp (
+            between: 79,
+            and: 79,
+            goto: 79
+        );
+
+         ifTemp (
+            between: 80,
+            and: 80,
+            goto: 100
+        );
+
+       
+    }
+
+    @70
+    set (
+        color: #0000ff,
+        duration: 250,
+        ledsOn: [6]
+    );
+    goto(checktemp);
+
+	@71
+    set (
+        color: #0000ff,
+        duration: 250,
+        ledsOn: [5,7]
+    );
+    goto(checktemp);
+
+	@72
+    set (
+        color: #0000ff,
+        duration: 250,
+        ledsOn: [4,8]
+    );
+    goto(checktemp);
+
+	@73
+    set (
+        color: #0000ff,
+        duration: 250,
+        ledsOn: [3,9]
+    );
+    goto(checktemp);
+
+	@74
+    set (
+        color: #00ff00,
+        duration: 250,
+        ledsOn: [3,9]
+    );
+    goto(checktemp);
+
+	@75
+    set (
+        color: #00ff00,
+        duration: 250,
+        ledsOn: [2,10]
+    );
+    goto(checktemp);
+
+	@76
+    set (
+        color: #ff9A00,
+        duration: 250,
+        ledsOn: [2,10]
+    );
+    goto(checktemp);
+
+	@77
+    set (
+        color: #ff0000,
+        duration: 250,
+        ledsOn: [2,10]
+    );
+    goto(checktemp);
+
+	@78
+    set (
+        color: #ff0000,
+        duration: 250,
+        ledsOn: [1,11]
+    );
+    goto(checktemp);
+
+    @79
+    set (
+        color: #ff0000,
+        duration: 250,
+        ledsOn: [0]
+    );
+    goto(checktemp);
+
+	@80
+    set (
+        color: #ff0000,
+        duration: 250,
+        ledsOn: [0,1,2,3,4,5,6,7,8,9,10,11]
+    );
+
+	set (
+        color: #ff0000,
+        duration: 250,
+        ledsOn: []
+    );
+    goto(checktemp);
+   
+}

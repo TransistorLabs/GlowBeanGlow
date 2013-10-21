@@ -13,11 +13,9 @@ namespace GlowBeanGlow.Compiler
     public class Parser
     {
         private readonly IList<Token> _tokens;
-        private readonly IList<ProgramInstruction> _instructions;
+        private readonly IList<InstructionContext> _instructionContextData;
         private int _tokenIndex = 0;
-        private int _currentInstructionIndex = 9;
         private Stack<string> _loopScopeLabels;
-        //private string _currentLabel = "";
 
         private Dictionary<string, int> _labels;
 
@@ -26,7 +24,7 @@ namespace GlowBeanGlow.Compiler
             _loopScopeLabels = new Stack<string>();
             _labels = new Dictionary<string, int>();
             _tokens = tokens;
-            _instructions = new List<ProgramInstruction>();
+            _instructionContextData = new List<InstructionContext>();
         }
 
         public IEnumerable<IInstruction> Parse()
@@ -49,29 +47,29 @@ namespace GlowBeanGlow.Compiler
             }
 
             ResolveLabels();
-            return _instructions.Select(p => p.Instruction);
+            return _instructionContextData.Select(p => p.Instruction);
         }
 
         private void ResolveLabels()
         {
-            foreach (var instruction in _instructions)
+            foreach (var instructionContext in _instructionContextData)
             {
-                var jumpTo = instruction.Instruction as JumpToInstruction; 
+                var jumpTo = instructionContext.Instruction as JumpToInstruction; 
                 if (jumpTo != null)
                 {
-                    jumpTo.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
+                    jumpTo.JumpTargetIndex = (ushort)_labels[instructionContext.GotoLabel];
                 }
 
-                var buttonEvent = instruction.Instruction as ButtonEventInstruction;
+                var buttonEvent = instructionContext.Instruction as ButtonEventInstruction;
                 if (buttonEvent != null)
                 {
-                    buttonEvent.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
+                    buttonEvent.JumpTargetIndex = (ushort)_labels[instructionContext.GotoLabel];
                 }
 
-                var tempCondition = instruction.Instruction as TempConditionInstruction;
+                var tempCondition = instructionContext.Instruction as TempConditionInstruction;
                 if (tempCondition != null)
                 {
-                    tempCondition.JumpTargetIndex = (ushort)_labels[instruction.GotoLabel];
+                    tempCondition.JumpTargetIndex = (ushort)_labels[instructionContext.GotoLabel];
                 }
             }
         }
@@ -88,7 +86,7 @@ namespace GlowBeanGlow.Compiler
             }
 
             // Add label and program index
-            _labels.Add(token.RawValue, _instructions.Count);
+            _labels.Add(token.RawValue, _instructionContextData.Count);
         }
         
         private bool ProcessNextToken()
@@ -112,7 +110,7 @@ namespace GlowBeanGlow.Compiler
                         var label = _loopScopeLabels.Pop();
                         var jumpInstruction = GetNewProgramInstruction(new JumpToInstruction());
                         jumpInstruction.GotoLabel = label;
-                        _instructions.Add(jumpInstruction);
+                        _instructionContextData.Add(jumpInstruction);
                     }
                     else
                     {
@@ -133,7 +131,7 @@ namespace GlowBeanGlow.Compiler
                     AssertValid(scopeUp, "Expected: {", x => x.Type == TokenType.ScopeUp);
                     //save index for scope exit
                     var tempLabel = Guid.NewGuid().ToString();
-                    _labels.Add(tempLabel, _instructions.Count);
+                    _labels.Add(tempLabel, _instructionContextData.Count);
                     _loopScopeLabels.Push(tempLabel);
                     break;
 
@@ -162,9 +160,9 @@ namespace GlowBeanGlow.Compiler
             }
         }
 
-        private ProgramInstruction GetNewProgramInstruction(IInstruction instruction)
+        private InstructionContext GetNewProgramInstruction(IInstruction instruction)
         {
-            var p = new ProgramInstruction {Instruction = instruction};
+            var p = new InstructionContext {Instruction = instruction};
             return p;
         }
 
@@ -207,7 +205,7 @@ namespace GlowBeanGlow.Compiler
             }
 
 
-            _instructions.Add(GetNewProgramInstruction(setInstruction));
+            _instructionContextData.Add(GetNewProgramInstruction(setInstruction));
         }
 
         //ifTemp (
@@ -256,7 +254,7 @@ namespace GlowBeanGlow.Compiler
                 }
             }
 
-            _instructions.Add(tempProgramInstruction);
+            _instructionContextData.Add(tempProgramInstruction);
         }
 
         private void ProcessIncrementFunction()
@@ -318,7 +316,7 @@ namespace GlowBeanGlow.Compiler
                 }
             }
 
-            _instructions.Add(GetNewProgramInstruction(incrementInstruction));
+            _instructionContextData.Add(GetNewProgramInstruction(incrementInstruction));
         }
 
         private void ProcessGotoFunction()
@@ -337,12 +335,12 @@ namespace GlowBeanGlow.Compiler
             AssertValid(nextToken, "expected: ;",
                         x => x.Type == TokenType.TerminateStatement);
 
-            _instructions.Add(jumpInstruction);
+            _instructionContextData.Add(jumpInstruction);
         }
 
         private void ProcessButtonEventFunction()
         {
-            var buttonEventInstruction = new ProgramInstruction { Instruction = new ButtonEventInstruction() };
+            var buttonEventInstruction = new InstructionContext { Instruction = new ButtonEventInstruction() };
 
             var nextToken = GetNextToken();
             AssertValid(nextToken, "Expected: (", x => x.Type == TokenType.StartFunction);
@@ -357,7 +355,7 @@ namespace GlowBeanGlow.Compiler
             AssertValid(nextToken, "expected: ;",
                         x => x.Type == TokenType.TerminateStatement);
             
-            _instructions.Add(buttonEventInstruction);
+            _instructionContextData.Add(buttonEventInstruction);
         }
 
         private void AssertParameterSeparator()
