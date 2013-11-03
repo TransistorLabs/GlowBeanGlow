@@ -23,27 +23,27 @@ loop {
     loop {
 
         set (
-        color:		#ff9900,
+        color:		#ffffff,
         duration:	100,
-        ledsOn:		[0]
+        ledsOn:		ALLON
         );
 
-        set (
-        color: #ff99ff,
-        duration: 100,
-        ledsOn: [3]
-        );
+        increment (
+			addRed:		-3,					// any addx values that are zero can be omitted; if all 3 are zero, incrementColorDelay and incrementColorCount can also be omitted
+			addGreen:	-4, 				// valid values are -128 to 127
+			addBlue:	-2, 
 
-        set (
-        color: #00ff00,
-        duration: 100,
-        ledsOn: [6]
-        );
+			incrementColorDelay: 5,	// duration of each color increment in milliseconds (0-255; may be validated to a divisor or 2 or 5; TBD: requires firmware change)
+			incrementColorCount: 30,	// number of times all colors should be incremented (0-255; validation may include checking for overflows for all colors;
+		);
 
-        set (
-        color: #0000ff,
-        duration: 100,
-        ledsOn: [9]
-        );
+		increment (
+			addRed:		3,
+			addGreen:	4,
+			addBlue:	2, 
+
+			incrementColorDelay: 5,	// duration of each color increment in milliseconds (0-255; may be validated to a divisor or 2 or 5; TBD: requires firmware change)
+			incrementColorCount: 30,	// number of times all colors should be incremented (0-255; validation may include checking for overflows for all colors;
+		);
     }
 }

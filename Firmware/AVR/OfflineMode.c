@@ -264,7 +264,7 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 	else
 	{
 		bool instructionFinished = true;
-		uint16_t currentTemp;// = TempDriver_GetTempC();
+		uint16_t currentTemp;
 		
 		// Perform mid-instruction animation processing (not relevant for SetFrame)
 		switch(currentInstruction.InstructionType)
@@ -385,7 +385,7 @@ static void GetNextFrame_AnimateMode(LedDriver_OneColorFrame * const frameData)
 					
 				case InstructionType_TempCondition:
 					{
-						currentTemp = (uint16_t)TempDriver_GetTempF();
+						currentTemp = (uint16_t)(TempDriver_GetTempF() + 0.5);
 						if(currentTemp >= currentInstruction.TempCondition.LowTempF 
 							&& currentTemp <= currentInstruction.TempCondition.HighTempF)
 						{

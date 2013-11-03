@@ -182,13 +182,13 @@ loop {
 	@80
     set (
         color: RED,
-        duration: 250,
+        duration: 100,
         ledsOn: ALLON
     );
 
 	set (
         color: RED,
-        duration: 250,
+        duration: 50,
         ledsOn: ALLOFF
     );
     goto(checktemp);
