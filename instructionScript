@@ -1,0 +1,50 @@
+
+loop {
+
+	#start:				// optional; if included, must be alphanumeric with no punctuation or whitespace (aside from trim())
+	set (
+		color: #eeffgg,				// expected to be #000 or #000000 format, or standard* named colors (case-insensitive)
+		duration: 1000,				// duration of frame in milliseconds (0-65535; may be validated to a divisor of 2 or 5; TBD)
+		LedsOn: [0,1,2,4,8,9,10,11]	// an array of leds to turn on; all others will be off (valid values are 0-11).
+									// may offer shortcuts for "none" and "all", possibly even "poles", and "compass"
+	);
+
+	#clockwiseShift:
+	increment (
+		
+		addRed: 0,					// any addx values that are zero can be omitted; if all 3 are zero, incrementColorDelay and incrementColorCount can also be omitted
+		addGreen: 0, 
+		addBlue: 0, 
+		incrementColorDelay: 10,	// duration of each color increment in milliseconds (0-255; may be validated to a divisor or 2 or 5; TBD)
+		incrementColorCount: 10,	// number of times all colors should be incremented (0-255; validation may include checking for overflows for all colors;
+
+		rotationDirection: clockwise, 	// valid values are "clockwise" and "counterclockwise"; case-insensitive (anything else should error)
+		rotationDelay: 10, 				// delay in milliseconds between each single rotational shift (valid values are 0-255)
+		rotationCount: 12				// number of single rotational shifts to perform (valid values are 0-255)		
+
+	);
+
+	onPressEvent(BUTTON_1, clockwiseShift);		// onPress(<button#>, <label>)
+
+	#checkTemp:
+	loop {
+		if(getTempF() > 72) {
+			goto(red);
+		}
+	} //implicit goto(loop)
+
+	#red:
+
+	set (
+		label: start,				// optional; if included, must be alphanumeric with not punctuation or whitespace (aside from trim())
+		color: #ff0000,				// expected to be #000 or #000000 format, or standard* named colors (case-insensitive)
+		duration: 1000,				// duration of frame in milliseconds (0-65535; may be validated to a divisor of 2 or 5; TBD)
+		LedsOn: [ALL_ON]				// an array of leds to turn on; all others will be off (valid values are 0-11).
+									// may offer shortcuts for "none" and "all", possibly even "poles", and "compass"
+	);
+
+	goto(checkTemp);
+
+
+	goto(clockwiseShift);
+}
