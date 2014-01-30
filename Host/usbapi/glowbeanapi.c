@@ -10,7 +10,7 @@
 // static bool _user1ButtonLastState;
 // static bool _user2ButtonLastState;
 
-static glowbean_device *handle;
+static glowbean_device *currentHandle;
 static struct hid_device_info *devs, *cur_dev;
 
 static byte getHighByte(unsigned short value);
@@ -26,13 +26,19 @@ int glowbean_init(void)
 
 int glowbean_exit(void)
 {
-	hid_close(handle);
+	hid_close(currentHandle);
 	hid_exit();
 	return 0;
 }
 
 int glowbean_setframe(byte red, byte green, byte blue, ledbits ledsOn)
 {
+	return glowbean_setframe_to(red, green, blue, ledsOn, currentHandle);
+}
+
+int glowbean_setframe_to(byte red, byte green, byte blue, ledbits ledsOn, glowbean_device *handle)
+{
+	printf("r:%d\tg:%d\tb:%d\n", red, green, blue);
 	int res;
 	unsigned char buf[9];
 	memset(buf,0,sizeof(buf));
@@ -55,12 +61,12 @@ int glowbean_setframe(byte red, byte green, byte blue, ledbits ledsOn)
 
 glowbean_device* glowbean_open(void) 
 {
-	handle = hid_open(VENDOR_ID, PRODUCT_ID, NULL);
-	if (!handle) {
+	currentHandle = hid_open(VENDOR_ID, PRODUCT_ID, NULL);
+	if (!currentHandle) {
 		//printf("unable to open device\n");
  		return NULL;
 	}
-	return handle;
+	return currentHandle;
 }
 
 static byte getHighByte(unsigned short value)

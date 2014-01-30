@@ -47,6 +47,7 @@ public Action<bool> OnProgramWriteComplete;
 int glowbean_init();
 int glowbean_exit();
 int glowbean_setframe(byte red, byte green, byte blue, ledbits ledsOn);
+int glowbean_setframe_to(byte red, byte green, byte blue, ledbits ledsOn, glowbean_device *handle);
 glowbean_device* glowbean_open(void);
 
 
