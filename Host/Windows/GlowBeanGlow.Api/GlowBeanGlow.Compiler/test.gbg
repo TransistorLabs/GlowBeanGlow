@@ -1,0 +1,57 @@
+﻿/* Sample Glow Bean Glow Scripting Language reference program. */
+
+// Global definitions
+#define	ALL_ON	[0,1,2,3,4,5 ,6,7,8,9,10,11]
+#define	ALL_OFF	[]
+
+
+/*
+    TODO:
+    - create syntax highlighter for Sublime Text
+*/
+
+loop {
+
+    @start							// label; for use with goto() and onUserButtonPress()
+    set (
+        color: #eeff99,				// expected to be #000000 format; TODO: support #000 format and/or standard named colors (case-insensitive)
+        duration: 1000,				// duration of frame in milliseconds (0-65535; *may be validated to a divisor of 2 or 5; TBD)
+        ledsOn: [0,1,11]			// an array of leds to turn on; all others will be off (valid values are 0-11).
+                                    
+    );
+
+    @clockwiseShift
+    increment (
+        addRed: -3,					// any addx values that are zero can be omitted; if all 3 are zero, incrementColorDelay and incrementColorCount can also be omitted
+        addGreen: -2, 				// valid values are -128 to 127
+        addBlue: -1, 
+
+        incrementColorDelay: 10,	// duration of each color increment in milliseconds (0-255; may be validated to a divisor or 2 or 5; TBD: requires firmware change)
+        incrementColorCount: 10,	// number of times all colors should be incremented (0-255; validation may include checking for overflows for all colors;
+
+        rotationDirection: CLOCKWISE, 	// valid values are "CLOCKWISE" and "COUNTERCLOCKWISE"; //TODO: currently case-sensitive; may change this
+        rotationDelay: 10, 				// delay in milliseconds between each single rotational shift (valid values are 0-255)
+        rotationCount: 12				// number of single rotational shifts to perform (valid values are 0-255)		
+
+    );
+
+    onUserButtonPress(clockwiseShift);		// registers the instruction index to be loaded when the user button is pressed
+    
+    loop {
+
+        ifTemp (
+            between: 71,
+            and: 80,
+            goto: clockwiseShift
+        ); 
+
+        
+        @red
+        set (
+            color: #ff0000,
+            duration: 1000,
+            ledsOn:ALL_ON
+        );
+
+        goto(clockwiseShift);
+    }

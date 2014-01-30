@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Media;
-
+using GlowBeanGlow.Api;
 
 namespace GlowBeanGlow
 {

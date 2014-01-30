@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlowBeanGlow.ControlLibrary
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlowBeanGlow.Animator", "GlowBeanGlow.Animator\GlowBeanGlow.Animator.csproj", "{6B7FC8B6-4433-4656-92DF-019DCD30E3C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlowBeanGlow.Compiler", "GlowBeanGlow.Compiler\GlowBeanGlow.Compiler.csproj", "{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = GlowBeanGlow.Api.vsmdi
@@ -88,6 +90,16 @@ Global
 		{6B7FC8B6-4433-4656-92DF-019DCD30E3C0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{6B7FC8B6-4433-4656-92DF-019DCD30E3C0}.Release|x86.ActiveCfg = Release|x86
 		{6B7FC8B6-4433-4656-92DF-019DCD30E3C0}.Release|x86.Build.0 = Release|x86
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9EDAC64-71C2-41C5-A749-6FB0D5177BC0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

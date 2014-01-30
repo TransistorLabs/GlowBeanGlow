@@ -27,7 +27,7 @@ static TempDriver_TemperatureData currentTempData;
 
 static float currentTempC = 21.1111; // ~70 degrees F
 
-void Shutdown(bool shutdown);
+void SetShutdownStatus(bool shutdown);
 
 void TempDriver_Init(void)
 {
@@ -53,7 +53,7 @@ void TempDriver_Task(void)
 	if(shouldReadTemp)
 	{
 		// Bring the device out of shutdown
-		Shutdown(false);
+		SetShutdownStatus(false);
 		
 		uint8_t highByte;
 		uint8_t lowByte;
@@ -75,6 +75,9 @@ void TempDriver_Task(void)
 		
 		if(currentTempData.ValidData)
 		{
+			// If we got valid data, shut down the device
+			SetShutdownStatus(true);
+
 			uint8_t tempWhole = currentTempData.RawDataHigh << 1;
 			currentTempC = (float)tempWhole;
 			
@@ -82,9 +85,6 @@ void TempDriver_Task(void)
 			if ((currentTempData.FractionData & 0x02) > 0) { currentTempC += 0.125F; }
 			if ((currentTempData.FractionData & 0x04) > 0) { currentTempC += 0.25F; }
             if ((currentTempData.FractionData & 0x08) > 0) { currentTempC += 0.5F; }
-			
-			// If we got valid data, shut down the device
-			Shutdown(true);
 		}
 		
 		shouldReadTemp = false;
@@ -106,7 +106,7 @@ float TempDriver_GetTempF(void)
 	return currentTempC*9/5 + 32;
 }
 
-void Shutdown(bool shutdown)
+void SetShutdownStatus(bool shutdown)
 {
 	Temp_SelectChip();
 

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using GlowBeanGlow.Api.Display;
 using GlowBeanGlow.Api.Instructions;
 using GlowBeanGlow.Api.Interfaces;
+using GlowBeanGlow.Compiler;
+using Microsoft.Win32;
 
 namespace GlowBeanGlow.Api.TestInterface
 {
@@ -37,6 +41,8 @@ namespace GlowBeanGlow.Api.TestInterface
 
             _usbDriver.OnUser2ButtonPressed += () => Dispatcher.Invoke(() => { Button3.Style = Resources["ButtonOnStyle"] as Style; });
             _usbDriver.OnUser2ButtonReleased += () => Dispatcher.Invoke(() => Button3.Style = Resources["ButtonOffStyle"] as Style);
+
+            _usbDriver.OnProgramWriteComplete += (success) => MessageBox.Show("Write Complete. Successful: " + success);
 
             // TODO: add proper context binding here
             _frame =
@@ -263,6 +269,54 @@ namespace GlowBeanGlow.Api.TestInterface
         {
             _frame.Leds.RotateCounterClockwise();
             RenderFrame();
+        }
+
+        private string _lastFilename;
+        private IList<IInstruction> _lastInstructions = new List<IInstruction>();
+        private void CompileWrite_Click(object sender, RoutedEventArgs e)
+        {
+            var openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog().Value)
+            {
+                try
+                {
+                    _lastFilename = openDialog.FileName;
+                    CompileCurrent();
+                    _usbDriver.WriteAnimationProgram(_lastInstructions);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+        private void ReCompileReWrite_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CompileCurrent();
+                _usbDriver.WriteAnimationProgram(_lastInstructions.ToList());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private void CompileReWrite_Click(object sender, RoutedEventArgs e)
+        {
+            _usbDriver.WriteAnimationProgram(_lastInstructions.ToList());
+        }
+
+        private void CompileCurrent()
+        {
+            var fileContents = File.ReadAllText(_lastFilename);
+            fileContents = Preprocessor.Process(fileContents);
+            var lexer = new Lexer(fileContents);
+            var tokens = lexer.GetTokens();
+            var parser = new Parser(tokens);
+            _lastInstructions = parser.Parse().ToList();
         }
     }
 }

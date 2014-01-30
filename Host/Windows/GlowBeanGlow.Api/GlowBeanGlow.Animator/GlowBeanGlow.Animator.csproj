@@ -106,6 +106,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GlowBeanGlow.Api\GlowBeanGlow.Api.csproj">
+      <Project>{3fd4f574-1828-4666-9c73-12bd8aa86e71}</Project>
+      <Name>GlowBeanGlow.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GlowBeanGlow.ControlLibrary\GlowBeanGlow.ControlLibrary.csproj">
       <Project>{D977007E-6111-43F6-BB14-08C7DB5A643D}</Project>
       <Name>GlowBeanGlow.ControlLibrary</Name>

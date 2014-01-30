@@ -20,12 +20,14 @@ static void ManageFeatureModeState(void);
 
 /* Private variables */
 static Features_ModeOptions currentFeatureMode;
+static Features_ModeOptions lastFeatureMode;
 static int16_t currentInstructionIndex = -1;
 
 
 void Features_Init(void)
 {
 	currentFeatureMode = (Features_ModeOptions)FeatureModeOptions_RenderLiveFrameData;
+	lastFeatureMode = (Features_ModeOptions)FeatureModeOptions_RenderLiveFrameData;
 }
 
 void Features_ProcessReport(void const *reportData)
@@ -99,6 +101,7 @@ static void ManageFeatureModeState(void)
 			// reset index counter
 			currentInstructionIndex = -1; 
 			// Transition to InProgress mode and wait for data
+			lastFeatureMode = currentFeatureMode;
 			currentFeatureMode = FeatureModeOptions_StoreProgramInProgress;
 			break;
 		
@@ -109,18 +112,19 @@ static void ManageFeatureModeState(void)
 				Storage_SetInstructionCount(currentInstructionIndex);
 
 				// Reset to the normal, "non-feature" render mode
+				lastFeatureMode = currentFeatureMode;
 				currentFeatureMode = FeatureModeOptions_RenderLiveFrameData;
 			}			
 			break;
 		
 		case FeatureModeOptions_PlayStoredProgram:
 			OfflineMode_StartProgramPlay();
+			lastFeatureMode = currentFeatureMode;
 			currentFeatureMode = FeatureModeOptions_ProgramPlaying;
 			break;
-			
-		case FeatureModeOptions_StoreProgramInProgress:
-		case FeatureModeOptions_RenderLiveFrameData:
 		
+		case FeatureModeOptions_RenderLiveFrameData:
+		case FeatureModeOptions_StoreProgramInProgress:
 		default:
 			// do nothing
 			break;

@@ -87,16 +87,17 @@
 	typedef struct
 	{
 		uint16_t TargetIndex;
-		uint16_t Reserved[5];
+		uint8_t Reserved[5];
 		uint8_t InstructionType : 4,
 				ReservedBits	: 4;
-	} Instructions_ButtonCondition;
+	} Instructions_ButtonCondition; 
 	
 	typedef struct
 	{
 		uint16_t TargetIndex;
-		uint8_t CompareTempC;
-		uint16_t Reserved[4];
+		int16_t LowTempF;
+		int16_t HighTempF;
+		uint8_t Reserved;
 		uint8_t InstructionType : 4,
 				CompareType	: 4;
 	} Instructions_TempCondition;

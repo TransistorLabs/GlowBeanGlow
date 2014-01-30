@@ -341,7 +341,6 @@ void CALLBACK_HID_Device_ProcessHIDReport(USB_ClassInfo_HID_Device_t* const HIDI
 	else
 	{
 		Features_ModeOptions mode = Features_GetFeatureMode();
-		Instructions_Instruction* instruction;
 		
 		switch(mode)
 		{
