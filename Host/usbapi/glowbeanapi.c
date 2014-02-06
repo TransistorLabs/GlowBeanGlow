@@ -1,5 +1,7 @@
 
+#include <unistd.h>
 #include "glowbeanapi.h"
+
 
 
 // static bool _attached;
@@ -31,31 +33,74 @@ int glowbean_exit(void)
 	return 0;
 }
 
-int glowbean_setframe(byte red, byte green, byte blue, ledbits ledsOn)
+int glowbean_setLiveFrame(const glowbean_liveFrame *const framedata)
 {
-	return glowbean_setframe_to(red, green, blue, ledsOn, currentHandle);
+	return glowbean_setLiveFrame_to(framedata, currentHandle);
 }
 
-int glowbean_setframe_to(byte red, byte green, byte blue, ledbits ledsOn, glowbean_device *handle)
+int glowbean_setLiveFrame_to(const glowbean_liveFrame *const framedata, glowbean_device *handle)
 {
-	printf("r:%d\tg:%d\tb:%d\n", red, green, blue);
 	int res;
 	unsigned char buf[9];
 	memset(buf,0,sizeof(buf));
 
 	// SetFrame (the first byte is the report number (0x00))
 	buf[0] = 0x00;
-	buf[1] = red;
-	buf[2] = green;
-	buf[3] = blue;
-	buf[4] = getLowByte(ledsOn);
-	buf[5] = getHighByte(ledsOn);
+	buf[1] = framedata->color.red;
+	buf[2] = framedata->color.green;
+	buf[3] = framedata->color.blue;
+	buf[4] = getLowByte(framedata->ledsOn);
+	buf[5] = getHighByte(framedata->ledsOn);
 
 	res = hid_write(handle, buf, 9);
 	if (res < 0) {
 		printf("Unable to write()\n");
 		printf("Error: %ls\n", hid_error(handle));
 	}
+	return 0;
+}
+
+int glowbean_setFullColorFrame(const glowbean_fullColorLiveFrame *const framedata)
+{
+	return glowbean_setFullColorFrame_to(framedata, currentHandle);
+}
+
+int glowbean_setFullColorFrame_to(const glowbean_fullColorLiveFrame *const framedata, glowbean_device *handle)
+{
+	int res;
+	unsigned char buf[9];
+	memset(buf,0,sizeof(buf));
+
+
+	for(byte i = 0; i<6; i++)
+	{
+		byte metadata = 0x01; // 0x_1 is the full-color indicator
+		metadata |= (i << 4);
+
+		buf[0] = 0x00;
+		
+		// Color one
+		buf[1] = 0x00;
+		buf[2] = i*4+5;
+		buf[3] = i;
+		
+		// Color two
+		buf[4] = i+2;
+		buf[5] = i+4;
+		buf[6] = 0x00;
+		
+		buf[7] = 0xff; //onbits - i=0: lowbyte; i=1; highbyte
+		buf[8] = metadata;
+	
+		res = hid_write(handle, buf, 9);
+		if (res < 0) {
+			printf("Unable to write()\n");
+			printf("Error: %ls\n", hid_error(handle));
+			return res;
+		}
+
+	}
+	
 	return 0;
 }
 

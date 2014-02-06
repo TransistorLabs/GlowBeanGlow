@@ -30,7 +30,24 @@ extern "C" {
 
 typedef struct hid_device_ glowbean_device;
 typedef unsigned char byte;
-typedef unsigned short ledbits;
+typedef unsigned short ushort;
+
+typedef struct {
+	byte red;
+	byte green;
+	byte blue;
+} glowbean_ledColor;
+
+
+typedef struct {
+	glowbean_ledColor color;
+	ushort ledsOn;
+} glowbean_liveFrame;
+
+typedef struct {
+	glowbean_ledColor colors[12];
+	ushort ledsOn;
+} glowbean_fullColorLiveFrame;
 
 /*
 public Action<byte[]> OnReportChange;
@@ -46,8 +63,13 @@ public Action<bool> OnProgramWriteComplete;
 
 int glowbean_init();
 int glowbean_exit();
-int glowbean_setframe(byte red, byte green, byte blue, ledbits ledsOn);
-int glowbean_setframe_to(byte red, byte green, byte blue, ledbits ledsOn, glowbean_device *handle);
+
+int glowbean_setLiveFrame(const glowbean_liveFrame *const framedata);
+int glowbean_setLiveFrame_to(const glowbean_liveFrame *const framedata, glowbean_device *handle);
+
+int glowbean_setFullColorFrame(const glowbean_fullColorLiveFrame *const framedata);
+int glowbean_setFullColorFrame_to(const glowbean_fullColorLiveFrame *const framedata, glowbean_device *handle);
+
 glowbean_device* glowbean_open(void);
 
 

@@ -90,7 +90,7 @@ LIBS += -framework IOKit -framework CoreFoundation
 
 EXEFLAGS = 
 #LIBFLAGS = -bundle -o $(LIBTARGET) -Wl,-search_paths_first $(LIBS)
-LIBFLAGS = -dynamiclib -o $(LIBTARGET) -Wl,-search_paths_first $(LIBS)
+LIBFLAGS = -dynamiclib -install_name '@executable_path/../Frameworks/$(LIBTARGET)' -o $(LIBTARGET) -Wl,-search_paths_first $(LIBS)
 EXE=
 
 endif
