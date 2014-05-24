@@ -107,7 +107,7 @@ void ApplicationMode_Task(void)
 	LastApplicationMode = ApplicationMode;
 }
 
-/** Configures the board hardware and chip peripherals for the demo's functionality. */
+/** Configures the board hardware and chip peripherals */
 void SetupHardware()
 {
 	/* Disable watchdog if enabled by bootloader/fuses */
